@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import productRoutes from "./routes/productRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 dotenv.config();
 
@@ -12,21 +14,27 @@ app.use(cors()); // allow frontend to talk to backend
 app.use(express.json()); // parse JSON body
 
 // MongoDB connection
-// mongoose
-//   .connect(process.env.MONGO_URI)
-//   .then(() => console.log("✅ MongoDB Connected"))
-//   .catch((err) => console.log("❌ DB Error:", err));
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB Connected");
+  } catch (error) {
+    console.error("❌ DB Error:", error.message);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 // Routes
 app.get("/", (req, res) => {
   res.send("E-commerce API is running...");
 });
 
-// Import product routes
-import productRoutes from "./routes/productRoutes.js";
+// Routes
+
 app.use("/api/products", productRoutes);
 
-import orderRoutes from "./routes/orderRoutes.js";
 app.use("/api/orders", orderRoutes);
 
 const PORT = process.env.PORT || 5000;
