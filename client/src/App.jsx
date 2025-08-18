@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import Checkout from "./pages/Checkout";
 import Footer from "./components/Footer";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -5,7 +5,7 @@ import axios from "axios";
 import { CreditCard, MapPin, User, Mail, ArrowRight } from "lucide-react";
 
 export default function Checkout() {
-  const { cart, removeFromCart } = useCartStore();
+  const { cart } = useCartStore();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -27,15 +27,21 @@ export default function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/orders", {
+      const response = await axios.post("http://localhost:5000/api/orders", {
         ...form,
         cart,
         totalPrice,
       });
 
-      alert("✅ Order placed successfully!");
-      cart.forEach((item) => removeFromCart(item._id));
-      navigate("/");
+      // Example: Assuming response returns { orderId: "...", ... }
+      const orderId = response.data?._id || "ORD12345";
+      console.log(response.data);
+
+      useCartStore.getState().emptyCart();
+
+      navigate("/order-confirmation", {
+        state: { orderId, totalPrice },
+      });
     } catch (err) {
       console.error("Error placing order:", err);
       alert("❌ Error placing order. Please try again.");
@@ -50,7 +56,7 @@ export default function Checkout() {
         </h2>
         <button
           onClick={() => navigate("/products")}
-          className="bg-gradient-to-r from-indigo-600 to-blue-500 text-white px-6 py-3 rounded-xl shadow hover:from-indigo-700 hover:to-blue-600 transition"
+          className="w-full md:w-auto bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-10 py-4 rounded-full text-lg font-bold shadow-lg hover:from-yellow-500 hover:to-orange-600 transition transform hover:scale-105 active:scale-95"
         >
           Browse Products
         </button>
@@ -134,7 +140,7 @@ export default function Checkout() {
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-indigo-600 to-blue-500 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:from-indigo-700 hover:to-blue-600 transition transform hover:scale-[1.02] active:scale-95"
+                className="w-full md:w-auto bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-10 py-4 rounded-full text-lg font-bold shadow-lg hover:from-yellow-500 hover:to-orange-600 transition transform hover:scale-105 active:scale-95"
               >
                 Place Order
               </button>
