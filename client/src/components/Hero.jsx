@@ -30,7 +30,7 @@ const Hero = () => {
         <div className="mt-10 flex flex-wrap justify-center gap-6">
           <Link
             to="/products"
-            className="bg-yellow-400 text-gray-900 px-8 py-3 rounded-full font-bold shadow-lg hover:scale-105 hover:bg-yellow-300 transition transform"
+            className="bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-8 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition transform"
           >
             Explore Menu
           </Link>

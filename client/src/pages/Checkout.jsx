@@ -2,7 +2,7 @@ import { useCartStore } from "../store/cartStore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CreditCard, MapPin, User, Mail, ArrowRight } from "lucide-react";
+import { CreditCard, MapPin, User, Mail, Phone } from "lucide-react";
 
 export default function Checkout() {
   const { cart } = useCartStore();
@@ -10,7 +10,9 @@ export default function Checkout() {
     name: "",
     email: "",
     address: "",
+    phone: "",
     payment: "card",
+    cookingInstructions: "",
   });
   const navigate = useNavigate();
 
@@ -121,6 +123,20 @@ export default function Checkout() {
                   className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
                 />
               </div>
+              <div className="relative">
+                <Phone
+                  className="absolute left-3 top-3 text-gray-400"
+                  size={20}
+                />
+                <input
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="Phone Number"
+                  required
+                  className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
 
               <div className="relative">
                 <CreditCard
@@ -136,6 +152,17 @@ export default function Checkout() {
                   <option value="card">Credit/Debit Card</option>
                   <option value="cod">Cash on Delivery</option>
                 </select>
+              </div>
+
+              <div className="relative">
+                <textarea
+                  name="cookingInstructions"
+                  value={form.cookingInstructions}
+                  onChange={handleChange}
+                  placeholder="Cooking Instructions (optional)"
+                  rows={3}
+                  className="w-full border border-gray-300 rounded-lg pl-4 pr-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
               </div>
 
               <button

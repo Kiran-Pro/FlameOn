@@ -5,56 +5,44 @@ export default function ProductCard({ product }) {
   const addToCart = useCartStore((state) => state.addToCart);
 
   return (
-    <div className="group relative bg-gradient-to-br from-gray-800/60 via-gray-900/60 to-black/70 border border-white/10 rounded-3xl shadow-xl p-5 backdrop-blur-md overflow-hidden hover:shadow-2xl transition duration-500 hover:-translate-y-2 hover:scale-[1.02]">
-      {/* Product Image */}
-      <div className="relative overflow-hidden rounded-2xl">
+    <div className="group flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-4">
+      {/* Image */}
+      <div className="relative w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-56 object-cover rounded-2xl transform transition duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent rounded-2xl"></div>
-
-        {/* Badge - Category */}
         {product.category && (
-          <span className="absolute top-3 right-3 bg-black/60 text-white text-xs font-semibold px-3 py-1 rounded-full backdrop-blur-sm shadow-md">
+          <span className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
             {product.category}
           </span>
         )}
       </div>
 
-      {/* Info Section */}
-      <div className="mt-5 flex flex-col gap-3">
-        {/* Name */}
-        <h3 className="text-2xl font-extrabold text-white drop-shadow line-clamp-1">
+      {/* Content */}
+      <div className="flex flex-col justify-between flex-1 min-w-0">
+        {/* Title */}
+        <h3 className="text-lg font-bold text-white truncate">
           {product.name}
         </h3>
 
-        {/* Description */}
-        {product.description && (
-          <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed">
-            {product.description}
-          </p>
-        )}
-
         {/* Price */}
-        <p className="text-3xl font-extrabold text-yellow-400 tracking-wide drop-shadow">
+        <p className="text-yellow-400 font-extrabold text-lg mt-1">
           ₹{product.price}
         </p>
 
-        {/* Buttons */}
-        <div className="mt-4 flex gap-3">
+        {/* Actions */}
+        <div className="flex gap-2 mt-2">
           <button
             onClick={() => addToCart(product)}
-            className="flex-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 font-bold py-2.5 rounded-full hover:from-orange-500 hover:to-yellow-500 transition transform active:scale-95 shadow-lg"
+            className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold px-4 py-1.5 rounded-full text-sm shadow hover:from-orange-500 hover:to-yellow-400 transition"
           >
-            Add to Cart
+            Add
           </button>
           <Link
             to={`/product/${product._id}`}
-            className="flex-1 text-center bg-white/20 text-white font-semibold py-2.5 rounded-full hover:bg-white/30 transition shadow"
+            className="bg-white/10 text-white font-medium px-4 py-1.5 rounded-full text-sm hover:bg-white/20 transition"
           >
             View
           </Link>

@@ -5,32 +5,40 @@ export default function Featured() {
     {
       name: "Classic Cheeseburger",
       image: "https://images.unsplash.com/photo-1550317138-10000687a72b",
-      price: "₹199",
+      price: 199,
     },
     {
       name: "Pepperoni Pizza",
-      image: "https://images.unsplash.com/photo-1601924638867-3ec2c8fef8d5",
-      price: "₹299",
+      price: 299,
+      image:
+        "https://www.tastingtable.com/img/gallery/best-frozen-pizzas-ranked/intro-1641312916.webp",
     },
     {
-      name: "Chocolate Milkshake",
-      image: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f",
-      price: "₹149",
+      name: "Blueberry Cheesecake",
+      price: 229,
+      image:
+        "https://www.allrecipes.com/thmb/KVEVO21SkBwAWPD-PJiehL0i9sY=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/7934-Blueberry-Cheesecake-ddmfs-107-4x3-1-b923ba1512404beaa1766396d6ce07c6.jpg",
+      category: "Desserts",
     },
   ];
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-10">
+        <h2 className="text-4xl font-bold text-gray-900 mb-10">
           Featured <span className="text-yellow-500">Dishes</span>
         </h2>
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
           {featuredItems.map((dish) => (
             <div
               key={dish.name}
-              className="bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
+              className="relative bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
             >
+              {/* Badge */}
+              <div className="absolute top-3 left-3 bg-yellow-500 text-white px-3 py-1 text-sm rounded-full shadow">
+                Featured
+              </div>
+
               <img
                 src={dish.image}
                 alt={dish.name}
@@ -38,14 +46,16 @@ export default function Featured() {
               />
               <div className="p-4">
                 <h3 className="text-lg font-semibold">{dish.name}</h3>
-                <p className="text-yellow-600 font-bold">{dish.price}</p>
+                <p className="text-yellow-600 font-bold">
+                  ₹{dish.price.toLocaleString("en-IN")}
+                </p>
               </div>
             </div>
           ))}
         </div>
         <Link
           to="/products"
-          className="mt-10 inline-block bg-yellow-500 text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-yellow-400 transition"
+          className="mt-10 inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-8 py-3 rounded-full font-semibold shadow hover:scale-105 transition transform"
         >
           View Full Menu
         </Link>

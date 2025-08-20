@@ -66,11 +66,11 @@ export default function Cart() {
                   {/* Quantity Controls */}
                   <div className="flex items-center gap-2 mt-1">
                     <button
-                      onClick={() =>
-                        updateQuantity(
-                          item.name,
-                          Math.max(1, item.quantity - 1)
-                        )
+                      onClick={
+                        () =>
+                          item.quantity > 1
+                            ? updateQuantity(item.name, item.quantity - 1)
+                            : removeFromCart(item.name) // 👈 remove when qty = 1
                       }
                       className="w-6 h-6 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300"
                     >
