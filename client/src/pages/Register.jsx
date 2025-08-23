@@ -1,75 +1,171 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { User, Mail, Lock } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { FiUser, FiMail } from "react-icons/fi";
+import { FcGoogle } from "react-icons/fc";
+import { register, googleLogin } from "../services/authService.js";
+import Input from "../components/Input.jsx";
+import PasswordInput from "../components/PasswordInput.jsx";
 
 export default function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const navigate = useNavigate();
 
+  // Alerts
+  const [alert, setAlert] = useState(null);
+
+  // Form
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",
+  });
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [loadingEmail, setLoadingEmail] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
+
+  // Helpers
   const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = (e) => {
+  const emailOk = /^\S+@\S+\.\S+$/.test(form.email);
+  const confirmOk = form.password && form.password === form.confirm;
+  const canSubmit =
+    form.name.trim() && emailOk && form.password.length >= 6 && confirmOk;
+
+  // Email register
+  const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("Register data:", form);
-    // TODO: connect with backend
+    if (!canSubmit)
+      return setAlert({ type: "error", text: "Fill the form correctly." });
+    setLoadingEmail(true);
+    try {
+      await register(form.name.trim(), form.email.trim(), form.password);
+      setAlert({ type: "success", text: "✅ Account created! Redirecting..." });
+      setTimeout(() => navigate("/login"), 800);
+    } catch {
+      setAlert({ type: "error", text: "Registration failed. Try again." });
+    } finally {
+      setLoadingEmail(false);
+    }
+  };
+
+  // Google
+  const handleGoogle = async () => {
+    setLoadingGoogle(true);
+    setAlert(null);
+    try {
+      await googleLogin();
+      setAlert({
+        type: "success",
+        text: "Signed in with Google! Redirecting...",
+      });
+      setTimeout(() => navigate("/profile"), 800);
+    } catch (err) {
+      console.error("Google login error:", err);
+      setAlert({ type: "error", text: "Google sign-in failed. Try again." });
+    } finally {
+      setLoadingGoogle(false);
+    }
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <div className="bg-white/10 backdrop-blur-xl p-10 rounded-2xl shadow-2xl w-full max-w-md border border-white/20">
-        <h1 className="text-3xl font-bold text-center text-white mb-8">
-          Create Account
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4">
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-6 sm:p-8 mt-16">
+        <h1 className="text-3xl font-bold text-center text-white">
+          Create <span className="text-yellow-400">Account</span>
         </h1>
+        <p className="text-center text-gray-300 mt-2 text-sm">
+          Join FlameOn in seconds
+        </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="relative">
-            <User className="absolute left-3 top-3 text-gray-400" size={20} />
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Full Name"
-              required
-              className="w-full bg-white/20 border border-white/30 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none"
-            />
-          </div>
+        {/* Email form */}
+        <form onSubmit={handleRegister} className="mt-6 space-y-4">
+          <Input
+            icon={FiUser}
+            type="text"
+            name="name"
+            placeholder="Full name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            icon={FiMail}
+            type="email"
+            name="email"
+            placeholder="Email address"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
 
-          <div className="relative">
-            <Mail className="absolute left-3 top-3 text-gray-400" size={20} />
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Email Address"
-              required
-              className="w-full bg-white/20 border border-white/30 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none"
-            />
-          </div>
+          {/* Password */}
+          <PasswordInput
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            placeholder="Password (min 6 chars)"
+            show={showPass}
+            setShow={setShowPass}
+          />
 
-          <div className="relative">
-            <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Password"
-              required
-              className="w-full bg-white/20 border border-white/30 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none"
-            />
-          </div>
+          {/* Confirm Password */}
+          <PasswordInput
+            name="confirm"
+            value={form.confirm}
+            onChange={handleChange}
+            placeholder="Confirm password"
+            show={showConfirm}
+            setShow={setShowConfirm}
+          />
+          {!confirmOk && form.confirm && (
+            <p className="text-xs text-red-400">Passwords do not match.</p>
+          )}
 
           <button
             type="submit"
-            className="w-full bg-yellow-400 text-gray-900 font-bold py-3 rounded-lg shadow-lg hover:bg-yellow-300 transition transform hover:scale-[1.02] active:scale-95"
+            disabled={!canSubmit || loadingEmail}
+            className={`w-full font-semibold py-3 rounded-lg shadow-lg transition ${
+              !canSubmit || loadingEmail
+                ? "bg-gray-500 text-gray-200 cursor-not-allowed"
+                : "bg-yellow-400 text-gray-900 hover:bg-yellow-300"
+            }`}
           >
-            Register
+            {loadingEmail ? "Creating account..." : "Create Account"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-gray-300">
+        <div className="flex items-center my-6">
+          <div className="flex-grow border-t border-white/20" />
+          <span className="px-3 text-gray-300 text-sm">OR</span>
+          <div className="flex-grow border-t border-white/20" />
+        </div>
+
+        {/* Google */}
+        <button
+          onClick={handleGoogle}
+          disabled={loadingGoogle}
+          className={`w-full flex items-center justify-center gap-3 bg-white text-gray-900 py-3 rounded-lg border border-gray-200 shadow hover:bg-gray-50 transition ${
+            loadingGoogle ? "opacity-70 cursor-not-allowed" : ""
+          }`}
+        >
+          <FcGoogle size={22} />
+          {loadingGoogle ? "Connecting..." : "Continue with Google"}
+        </button>
+
+        {/* Alerts */}
+        {alert && (
+          <p
+            className={`mt-4 text-center text-sm ${
+              alert.type === "success" ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {alert.text}
+          </p>
+        )}
+
+        <p className="mt-6 text-center text-gray-300 text-sm">
           Already have an account?{" "}
           <Link to="/login" className="text-yellow-400 hover:underline">
             Login

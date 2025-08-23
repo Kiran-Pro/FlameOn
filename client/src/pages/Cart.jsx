@@ -50,7 +50,6 @@ export default function Cart() {
               key={item.name}
               className="flex items-center justify-between border-b border-dashed border-gray-300 pb-3"
             >
-              {/* Thumbnail + Info */}
               <div className="flex items-center gap-3">
                 <img
                   src={item.image}
@@ -70,7 +69,7 @@ export default function Cart() {
                         () =>
                           item.quantity > 1
                             ? updateQuantity(item.name, item.quantity - 1)
-                            : removeFromCart(item.name) // 👈 remove when qty = 1
+                            : removeFromCart(item.name) //remove when qty = 1
                       }
                       className="w-6 h-6 flex items-center justify-center rounded bg-gray-200 hover:bg-gray-300"
                     >
@@ -115,7 +114,6 @@ export default function Cart() {
 
         <hr className="border-dashed border-gray-400 my-6" />
 
-        {/* Actions */}
         <div className="flex flex-col gap-3">
           <button
             onClick={emptyCart}
@@ -131,7 +129,6 @@ export default function Cart() {
           </Link>
         </div>
 
-        {/* Footer note */}
         <p className="mt-6 text-xs text-center text-gray-500">
           Thank you for dining!
         </p>

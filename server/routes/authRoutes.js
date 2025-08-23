@@ -5,64 +5,71 @@ import bcrypt from "bcryptjs";
 
 const router = express.Router();
 
-//Register Route
+//Register
 router.post("/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  try {
+    const { name, email, password } = req.body;
 
-  //To check if a user already exists
+    // Check if user already exists
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: "User already exists" });
+    }
 
-  const userExists = await User.findOne({ email });
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  if (userExists) {
-    return res.status(400).json({ message: "User already exists" });
+    // Create user
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    // Generate token
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
+
+    res.json({
+      user: { id: newUser._id, name: newUser.name, email: newUser.email },
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-
-  //Hash the password
-
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  //To create a new User
-
-  const newUser = await User.create({ name, email, password: hashedPassword });
-
-  //To create a jwt token
-
-  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-    expiresIn: "24h",
-  });
-
-  res.json({ newUser, token });
 });
 
-//Login Route
+//Login
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-router.post("/Login", async (req, res) => {
-  const { email, password } = req.body;
+    // Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
 
-  //check if user exists
+    // Compare password
+    const passMatches = await bcrypt.compare(password, user.password);
+    if (!passMatches) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
 
-  const user = await User.findOne({ email });
+    // Generate token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
 
-  if (!user) {
-    return res.status(401).json({ message: "Invalid email or password" });
+    res.json({
+      user: { id: user._id, name: user.name, email: user.email },
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
-
-  //Check if password matches
-
-  const passMatches = bcrypt.compare(password, user.password);
-
-  if (!passMatches) {
-    return res.status(401).json({ message: "Invalid email or password" });
-  }
-
-  //create a token
-
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "24h",
-  });
-
-  res.json({ user, token });
 });
 
 export default router;

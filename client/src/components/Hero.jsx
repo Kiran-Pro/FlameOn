@@ -10,14 +10,10 @@ const Hero = () => {
         backgroundPosition: "center",
       }}
     >
-      {/* Overlay Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80"></div>
-
-      {/* Floating Decorative Elements */}
       <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-400/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-24 right-12 w-28 h-28 bg-red-500/20 rounded-full blur-3xl animate-ping"></div>
 
-      {/* Content */}
       <div className="relative z-10 max-w-3xl px-4">
         <h1 className="text-6xl md:text-7xl font-extrabold drop-shadow-xl tracking-wide">
           Flame<span className="text-yellow-400">On</span>
@@ -26,7 +22,6 @@ const Hero = () => {
           Your one stop destination for the best food in town.
         </p>
 
-        {/* CTA Buttons */}
         <div className="mt-10 flex flex-wrap justify-center gap-6">
           <Link
             to="/products"
@@ -37,7 +32,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Decorative Gradient Bottom */}
       <div className="absolute bottom-0 w-full h-48 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
     </section>
   );

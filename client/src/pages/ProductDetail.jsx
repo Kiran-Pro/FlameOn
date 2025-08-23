@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCartStore } from "../store/cartStore";
-import { X, Star, Truck } from "lucide-react";
+import { FaStar, FaTruck, FaTimes } from "react-icons/fa";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -12,7 +12,7 @@ export default function ProductDetail() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/products/${id}`)
+      .get(`${import.meta.env.VITE_API}/products/${id}`)
       .then((res) => setProduct(res.data))
       .catch((err) => console.error("Error fetching product:", err));
   }, [id]);
@@ -33,7 +33,7 @@ export default function ProductDetail() {
           onClick={() => navigate("/products")}
           className="absolute top-6 right-6 z-10 bg-black/60 text-white rounded-full p-2 hover:bg-yellow-400 hover:text-gray-900 transition shadow-lg"
         >
-          <X size={20} />
+          <FaTimes size={20} />
         </button>
 
         {/* Image Section */}
@@ -58,11 +58,11 @@ export default function ProductDetail() {
           {/* Rating + Delivery Info */}
           <div className="flex items-center gap-4 text-sm text-gray-300 mb-4">
             <span className="flex items-center gap-1">
-              <Star size={16} className="text-yellow-400" />
+              <FaStar size={16} className="text-yellow-400" />
               4.7 (220 reviews)
             </span>
             <span className="flex items-center gap-1">
-              <Truck size={16} className="text-green-400" />
+              <FaTruck size={16} className="text-green-400" />
               Fast Delivery
             </span>
           </div>

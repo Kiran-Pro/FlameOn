@@ -32,7 +32,6 @@ export default function ProductCard({ product }) {
           ₹{product.price}
         </p>
 
-        {/* Actions */}
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => addToCart(product)}

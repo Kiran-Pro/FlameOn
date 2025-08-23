@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { CheckCircle } from "lucide-react";
+import { FaCheckCircle } from "react-icons/fa";
 
 export default function OrderConfirmation() {
   const location = useLocation();
@@ -11,7 +11,7 @@ export default function OrderConfirmation() {
   return (
     <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 to-white">
       <div className="bg-white shadow-2xl rounded-2xl p-10 text-center max-w-md">
-        <CheckCircle className="text-green-500 mx-auto mb-4" size={60} />
+        <FaCheckCircle className="text-green-500 mx-auto mb-4" size={60} />
         <h1 className="text-3xl font-bold text-gray-900 mb-4">
           Order Confirmed!
         </h1>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useCartStore } from "../store/cartStore";
-import { ShoppingCart } from "lucide-react";
+import { FaCartShopping, FaUser } from "react-icons/fa6";
 
 export default function Navbar() {
   const cart = useCartStore((state) => state.cart);
@@ -33,14 +33,24 @@ export default function Navbar() {
           {/* Cart */}
           <Link
             to="/cart"
-            className="relative flex items-center gap-1 text-gray-700 hover:text-yellow-500 transition"
+            className="relative flex items-center text-gray-700 hover:text-yellow-500 transition"
+            aria-label="Cart"
           >
-            <ShoppingCart size={22} />
+            <FaCartShopping size={22} />
             {cart.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full animate-bounce">
+              <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-bounce">
                 {cart.length}
               </span>
             )}
+          </Link>
+
+          {/* Profile */}
+          <Link
+            to="/profile"
+            className="flex items-center text-gray-700 hover:text-yellow-500 transition"
+            aria-label="Profile"
+          >
+            <FaUser size={22} />
           </Link>
         </div>
       </div>

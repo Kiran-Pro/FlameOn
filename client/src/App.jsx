@@ -11,6 +11,7 @@ import Navbar from "./components/Navbar";
 import Checkout from "./pages/Checkout";
 import Footer from "./components/Footer";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
   return (
@@ -18,15 +19,29 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route
+          path="/order-confirmation"
+          element={
+            <ProtectedRoute>
+              <OrderConfirmation />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer />
     </BrowserRouter>

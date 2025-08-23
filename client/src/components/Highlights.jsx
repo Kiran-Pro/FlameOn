@@ -1,26 +1,26 @@
-import { Salad, Zap, Wallet, Star } from "lucide-react";
+import { FaBowlFood, FaBolt, FaWallet, FaStar } from "react-icons/fa6";
 
 export default function Highlights() {
   const items = [
     {
       title: "Fresh Ingredients",
       desc: "Only the best, locally sourced ingredients.",
-      icon: <Salad size={36} className="text-green-500" />,
+      icon: <FaBowlFood size={36} className="text-green-500" />,
     },
     {
       title: "Fast Delivery",
       desc: "Hot & fresh, delivered right to your door.",
-      icon: <Zap size={36} className="text-yellow-500" />,
+      icon: <FaBolt size={36} className="text-yellow-500" />,
     },
     {
       title: "Affordable Prices",
       desc: "Delicious meals that don’t break the bank.",
-      icon: <Wallet size={36} className="text-blue-500" />,
+      icon: <FaWallet size={36} className="text-blue-500" />,
     },
     {
       title: "Loved by Foodies",
       desc: "Rated 4.9/5 by our amazing customers.",
-      icon: <Star size={36} className="text-orange-500" />,
+      icon: <FaStar size={36} className="text-orange-500" />,
     },
   ];
 

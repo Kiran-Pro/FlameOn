@@ -2,7 +2,8 @@ import { useCartStore } from "../store/cartStore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { CreditCard, MapPin, User, Mail, Phone } from "lucide-react";
+import { FaCreditCard, FaUser, FaEnvelope, FaPhone } from "react-icons/fa6";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 export default function Checkout() {
   const { cart } = useCartStore();
@@ -29,13 +30,20 @@ export default function Checkout() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/orders", {
-        ...form,
-        cart,
-        totalPrice,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API}/orders`,
+        {
+          ...form,
+          cart,
+          totalPrice,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
-      // Example: Assuming response returns { orderId: "...", ... }
       const orderId = response.data?._id || "ORD12345";
       console.log(response.data);
 
@@ -46,7 +54,7 @@ export default function Checkout() {
       });
     } catch (err) {
       console.error("Error placing order:", err);
-      alert("❌ Error placing order. Please try again.");
+      alert("Error placing order. Please try again.");
     }
   };
 
@@ -78,7 +86,7 @@ export default function Checkout() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="relative">
-                <User
+                <FaUser
                   className="absolute left-3 top-3 text-gray-400"
                   size={20}
                 />
@@ -93,7 +101,7 @@ export default function Checkout() {
               </div>
 
               <div className="relative">
-                <Mail
+                <FaEnvelope
                   className="absolute left-3 top-3 text-gray-400"
                   size={20}
                 />
@@ -109,7 +117,7 @@ export default function Checkout() {
               </div>
 
               <div className="relative">
-                <MapPin
+                <FaMapMarkerAlt
                   className="absolute left-3 top-3 text-gray-400"
                   size={20}
                 />
@@ -124,7 +132,7 @@ export default function Checkout() {
                 />
               </div>
               <div className="relative">
-                <Phone
+                <FaPhone
                   className="absolute left-3 top-3 text-gray-400"
                   size={20}
                 />
@@ -139,7 +147,7 @@ export default function Checkout() {
               </div>
 
               <div className="relative">
-                <CreditCard
+                <FaCreditCard
                   className="absolute left-3 top-3 text-gray-400"
                   size={20}
                 />

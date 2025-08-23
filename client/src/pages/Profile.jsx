@@ -1,181 +1,210 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  LogOut,
-  User,
-  Mail,
-  Package,
-  CheckCircle,
-  Clock,
-  Settings,
-} from "lucide-react";
+  FaUser,
+  FaEnvelope,
+  FaBox,
+  FaCog,
+  FaSignOutAlt,
+  FaSignInAlt,
+} from "react-icons/fa";
+
+import { logout, getProfile, getOrders } from "../services/authService";
+import AccountSettings from "../components/AccountSettings.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("info");
+  const [user, setUser] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  // Mock user data
-  const [user] = useState({
-    name: "Kiran Madhav",
-    email: "kiran@example.com",
-  });
+  useEffect(() => {
+    getProfile()
+      .then((data) => setUser(data.user))
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
 
-  // Mock order history
-  const orders = [
-    {
-      id: "ORD12345",
-      item: "Classic Cheeseburger",
-      price: "₹199",
-      status: "Delivered",
-    },
-    {
-      id: "ORD12346",
-      item: "Pepperoni Pizza",
-      price: "₹299",
-      status: "On the way",
-    },
-    {
-      id: "ORD12347",
-      item: "Chocolate Milkshake",
-      price: "₹149",
-      status: "Pending",
-    },
-  ];
+    getOrders()
+      .then((data) => setOrders(data))
+      .catch(() => setOrders([]));
+  }, []);
 
   const handleLogout = () => {
-    console.log("User logged out");
-    // TODO: clear auth and redirect
+    logout();
+    navigate("/login");
   };
 
+  if (loading) {
+    return (
+      <section className="min-h-screen flex items-center justify-center bg-gray-50">
+        <p className="text-gray-500">Loading...</p>
+      </section>
+    );
+  }
+
+  //Logged-out fallback
+  if (!user) {
+    return (
+      <section className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="bg-white shadow-xl rounded-2xl p-10 text-center max-w-md">
+          <FaSignInAlt className="mx-auto mb-4 text-yellow-500" size={50} />
+          <h2 className="text-2xl font-bold mb-2">Login Required</h2>
+          <p className="mb-6 text-gray-500">
+            Please log in to view your profile and orders.
+          </p>
+          <button
+            onClick={() => navigate("/login")}
+            className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-black py-3 rounded-lg font-semibold shadow hover:scale-[1.02] active:scale-95 transition"
+          >
+            Go to Login
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white py-16">
-      <div className="max-w-5xl mx-auto px-6">
+    <section className="min-h-screen py-20 bg-gradient-to-br from-indigo-50 via-white to-indigo-100 text-gray-900">
+      <div className="max-w-5xl mx-auto px-6 space-y-10">
         {/* Profile Header */}
-        <div className="relative flex flex-col items-center bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-10 mb-12">
-          {/* Avatar */}
-          <div className="w-28 h-28 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center text-4xl font-bold text-gray-900 shadow-lg">
+        <div className="text-center space-y-3">
+          <div className="mx-auto h-28 w-28 flex items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-4xl font-bold text-white shadow-lg">
             {user.name.charAt(0)}
           </div>
-
-          <h2 className="mt-6 text-3xl font-extrabold">{user.name}</h2>
-          <p className="text-gray-300 flex items-center gap-2 mt-2">
-            <Mail className="w-4 h-4 text-yellow-400" />
-            {user.email}
+          <h2 className="text-3xl font-extrabold">{user.name}</h2>
+          <p className="flex items-center justify-center gap-2 text-gray-600">
+            <FaEnvelope className="h-4 w-4 text-yellow-500" /> {user.email}
           </p>
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-center gap-6 mb-8">
-          <button
-            onClick={() => setActiveTab("info")}
-            className={`px-6 py-2 rounded-full font-semibold transition ${
-              activeTab === "info"
-                ? "bg-yellow-500 text-black shadow-lg"
-                : "bg-white/10 hover:bg-white/20"
-            }`}
-          >
-            Profile Info
-          </button>
-          <button
-            onClick={() => setActiveTab("orders")}
-            className={`px-6 py-2 rounded-full font-semibold transition ${
-              activeTab === "orders"
-                ? "bg-yellow-500 text-black shadow-lg"
-                : "bg-white/10 hover:bg-white/20"
-            }`}
-          >
-            Orders
-          </button>
-          <button
-            onClick={() => setActiveTab("settings")}
-            className={`px-6 py-2 rounded-full font-semibold transition ${
-              activeTab === "settings"
-                ? "bg-yellow-500 text-black shadow-lg"
-                : "bg-white/10 hover:bg-white/20"
-            }`}
-          >
-            Settings
-          </button>
+        <div className="flex justify-center gap-4">
+          {[
+            { id: "info", label: "Info", icon: FaUser },
+            { id: "orders", label: "Orders", icon: FaBox },
+            { id: "settings", label: "Settings", icon: FaCog },
+            // eslint-disable-next-line no-unused-vars
+          ].map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`flex items-center gap-2 px-6 py-2 rounded-full text-sm font-medium shadow-sm transition ${
+                activeTab === id
+                  ? "bg-yellow-400 text-black"
+                  : "bg-white text-gray-500 hover:bg-gray-100"
+              }`}
+            >
+              <Icon className="h-4 w-4" /> {label}
+            </button>
+          ))}
         </div>
 
-        {/* Tab Content */}
-        {activeTab === "info" && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <User className="text-yellow-400" /> Profile Info
-            </h2>
-            <p className="mb-4">
-              <span className="font-semibold">Name:</span> {user.name}
-            </p>
-            <p>
-              <span className="font-semibold">Email:</span> {user.email}
-            </p>
-          </div>
-        )}
+        {/* Content */}
+        <div>
+          {activeTab === "info" && (
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-xl p-8 border border-gray-100">
+              {/* Decorative gradient accent */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-200 to-orange-300 rounded-bl-[100px] opacity-20 pointer-events-none"></div>
 
-        {activeTab === "orders" && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20">
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-2">
-              <Package className="text-yellow-400" /> Order History
-            </h2>
-            {orders.length === 0 ? (
-              <p className="text-gray-400 italic">No orders placed yet.</p>
-            ) : (
-              <div className="space-y-4">
-                {orders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="flex items-center justify-between bg-white/5 rounded-lg px-5 py-4 border border-white/10 hover:border-yellow-400/50 transition shadow-md hover:shadow-lg"
+              {/* Quick Stats */}
+              <div className="grid grid-cols-3 gap-4 text-center">
+                {/* Orders Count */}
+                <div className="bg-gray-50 rounded-xl py-4 shadow-sm hover:shadow-md transition">
+                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                    Orders
+                  </p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {orders.length}
+                  </p>
+                </div>
+
+                {/* Total Spent */}
+                <div className="bg-gray-50 rounded-xl py-4 shadow-sm hover:shadow-md transition">
+                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                    Total Spent
+                  </p>
+                  <p className="text-lg font-semibold text-gray-900">
+                    ₹{orders.reduce((sum, order) => sum + order.totalPrice, 0)}
+                  </p>
+                </div>
+
+                {/* Loyalty Level */}
+                <div className="bg-gray-50 rounded-xl py-4 shadow-sm hover:shadow-md transition">
+                  <p className="text-xs text-gray-500 uppercase tracking-wide">
+                    Loyalty
+                  </p>
+                  <p
+                    className={`text-lg font-semibold ${
+                      orders.length > 10
+                        ? "text-yellow-600"
+                        : orders.length > 5
+                        ? "text-indigo-600"
+                        : "text-gray-600"
+                    }`}
                   >
-                    <div>
-                      <p className="text-lg font-semibold">{order.item}</p>
-                      <p className="text-sm text-gray-400">#{order.id}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-yellow-400 font-bold">{order.price}</p>
+                    {orders.length > 10
+                      ? "Gold"
+                      : orders.length > 5
+                      ? "Silver"
+                      : "Bronze"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "orders" && (
+            <div className="space-y-5">
+              {orders.length === 0 ? (
+                <p className="text-center text-gray-500">No orders yet.</p>
+              ) : (
+                orders.map((order) => (
+                  <div
+                    key={order._id}
+                    className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition border border-transparent hover:border-yellow-400/40"
+                  >
+                    <div className="flex justify-between items-center mb-3">
+                      <h4 className="font-semibold">
+                        Order #{order._id.slice(-6)}
+                      </h4>
                       <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 mt-1 rounded-full text-xs font-semibold 
-                          ${
-                            order.status === "Delivered"
-                              ? "bg-green-500/20 text-green-400"
-                              : order.status === "On the way"
-                              ? "bg-yellow-500/20 text-yellow-400"
-                              : "bg-gray-500/20 text-gray-300"
-                          }`}
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          order.status === "Delivered"
+                            ? "bg-green-100 text-green-700"
+                            : order.status === "Shipped"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-yellow-100 text-yellow-700"
+                        }`}
                       >
-                        {order.status === "Delivered" && (
-                          <CheckCircle className="w-3 h-3" />
-                        )}
-                        {order.status === "On the way" && (
-                          <Clock className="w-3 h-3" />
-                        )}
-                        {order.status}
+                        {order.status || "Pending"}
                       </span>
                     </div>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {order.cart.map((item) => item.name).join(", ")}
+                    </p>
+                    <p className="font-bold text-yellow-600">
+                      ₹{order.totalPrice}
+                    </p>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+                ))
+              )}
+            </div>
+          )}
 
-        {activeTab === "settings" && (
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <Settings className="text-yellow-400" /> Settings
-            </h2>
-            <p className="text-gray-300">
-              Settings options can go here (e.g., update password, notification
-              preferences, delete account).
-            </p>
-          </div>
-        )}
+          {activeTab === "settings" && (
+            <AccountSettings user={user} setUser={setUser} />
+          )}
+        </div>
 
-        {/* Logout Button */}
+        {/* Logout */}
         <button
           onClick={handleLogout}
-          className="mt-12 w-full flex items-center justify-center gap-3 bg-gradient-to-r from-red-500 to-red-700 py-3 rounded-xl font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition transform"
+          className="mt-10 w-full bg-gradient-to-r from-red-500 to-red-600 py-3 rounded-xl font-semibold text-white shadow hover:scale-[1.02] active:scale-95 transition"
         >
-          <LogOut className="w-5 h-5" />
-          Logout
+          <div className="flex items-center justify-center gap-2">
+            <FaSignOutAlt className="h-5 w-5" /> Logout
+          </div>
         </button>
       </div>
     </section>

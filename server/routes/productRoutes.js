@@ -26,10 +26,10 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST /api/products/seed
+// POST
 router.post("/seed", async (req, res) => {
   try {
-    const data = req.body; // expects array of products
+    const data = req.body;
     const products = await Product.insertMany(data);
 
     res.status(201).json({

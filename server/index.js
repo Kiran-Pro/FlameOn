@@ -1,13 +1,15 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-
-dotenv.config();
+import firebaseRoutes from "./routes/firebaseRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -19,9 +21,9 @@ app.use(express.json()); // parse JSON body
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB Connected");
+    console.log("MongoDB Connected");
   } catch (error) {
-    console.error("❌ DB Error:", error.message);
+    console.error("DB Error:", error.message);
     process.exit(1);
   }
 };
@@ -39,6 +41,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", profileRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/firebase-auth", firebaseRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

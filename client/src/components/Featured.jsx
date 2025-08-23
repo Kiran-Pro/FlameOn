@@ -34,7 +34,6 @@ export default function Featured() {
               key={dish.name}
               className="relative bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition overflow-hidden"
             >
-              {/* Badge */}
               <div className="absolute top-3 left-3 bg-yellow-500 text-white px-3 py-1 text-sm rounded-full shadow">
                 Featured
               </div>

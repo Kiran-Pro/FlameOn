@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
-import { Search, SlidersHorizontal, ArrowDownWideNarrow } from "lucide-react";
+import { FaSearch } from "react-icons/fa";
+import { FaArrowDownWideShort } from "react-icons/fa6";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -13,7 +14,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products")
+      .get(`${import.meta.env.VITE_API}/products`)
       .then((res) => {
         setProducts(res.data);
         setFilteredProducts(res.data);
@@ -62,13 +63,13 @@ export default function Products() {
 
         {/* Search Bar */}
         <div className="relative max-w-2xl mx-auto mb-12">
-          <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
             placeholder="Search your favorite dish..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white/10 backdrop-blur-md border border-white/20 text-white 
+            className="w-full bg-white/10 border border-white/20 text-white 
             rounded-full pl-14 pr-5 py-4 placeholder-gray-400 focus:ring-2 focus:ring-yellow-400 
             outline-none shadow-xl transition text-lg"
           />
@@ -105,7 +106,7 @@ export default function Products() {
 
           {/* Sort */}
           <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/20 backdrop-blur-sm">
-            <ArrowDownWideNarrow className="w-5 h-5 text-yellow-400" />
+            <FaArrowDownWideShort className="w-5 h-5 text-yellow-400" />
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
@@ -128,7 +129,7 @@ export default function Products() {
         <div className="flex flex-col gap-8">
           {filteredProducts.length === 0 ? (
             <p className="col-span-full text-center text-gray-400 text-lg">
-              No items found 😔
+              No items found
             </p>
           ) : (
             filteredProducts.map((p) => <ProductCard key={p._id} product={p} />)
