@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiUser, FiMail } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { register, googleLogin } from "../services/authService.js";
-import Input from "../components/Input.jsx";
-import PasswordInput from "../components/PasswordInput.jsx";
+import Input from "../components/Input/Input.jsx";
+import PasswordInput from "../components/Input/PasswordInput.jsx";
 
 export default function Register() {
   const navigate = useNavigate();

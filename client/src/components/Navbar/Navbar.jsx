@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useCartStore } from "../store/cartStore";
+import { useCartStore } from "../../store/cartStore";
 import { FaCartShopping, FaUser, FaUserShield } from "react-icons/fa6";
-import { logout } from "../services/authService";
+import { logout } from "../../services/authService";
 
 export default function Navbar() {
   const cart = useCartStore((state) => state.cart);

@@ -1,6 +1,6 @@
-import Hero from "../components/Hero";
-import Highlights from "../components/Highlights";
-import Featured from "../components/Featured";
+import Hero from "../components/Hero/Hero";
+import Highlights from "../components/Hero/Highlights";
+import Featured from "../components/Hero/Featured";
 
 const Home = () => {
   return (

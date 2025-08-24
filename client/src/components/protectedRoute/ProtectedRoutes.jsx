@@ -11,7 +11,7 @@ export default function ProtectedRoute({ children, adminOnly = false }) {
 
   // Logged in but not admin
   if (adminOnly && !user?.isAdmin) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/403" replace />;
   }
 
   return children;
