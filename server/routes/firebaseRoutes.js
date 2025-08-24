@@ -31,7 +31,7 @@ function initFirebaseAdmin() {
   return true;
 }
 
-// POST
+// POST /firebase-auth/login
 router.post("/login", async (req, res) => {
   const { token } = req.body;
   console.log("Incoming token:", token ? token.slice(0, 20) + "..." : "none");
@@ -50,19 +50,30 @@ router.post("/login", async (req, res) => {
     // Find or create the user in MongoDB
     let user = await User.findOne({ email: decoded.email });
     if (!user) {
-      console.log("🆕 Creating new user for:", decoded.email);
+      console.log("Creating new user for:", decoded.email);
       user = await User.create({
         name: decoded.name || "New User",
         email: decoded.email,
         password: "", // no password for Firebase users
+        isVerified: true, // firebase users are trusted
       });
     }
+
     // Issue JWT token
     const appToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
-    res.json({ user, token: appToken });
+    res.json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isVerified: user.isVerified,
+        isAdmin: user.isAdmin,
+      },
+      token: appToken,
+    });
   } catch (err) {
     console.error("Firebase login error:", err);
     res.status(401).json({

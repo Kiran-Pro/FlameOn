@@ -1,5 +1,6 @@
 import { useCartStore } from "../store/cartStore";
 import { Link } from "react-router-dom";
+import getImageSrc from "../utils/getImageSrc";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, emptyCart } = useCartStore();
@@ -52,7 +53,7 @@ export default function Cart() {
             >
               <div className="flex items-center gap-3">
                 <img
-                  src={item.image}
+                  src={getImageSrc(item.image)}
                   alt={item.name}
                   className="w-12 h-12 rounded-md object-cover shadow"
                 />

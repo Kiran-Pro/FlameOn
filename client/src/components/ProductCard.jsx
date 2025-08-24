@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useCartStore } from "../store/cartStore";
+import getImageSrc from "../utils/getImageSrc";
 
 export default function ProductCard({ product }) {
   const addToCart = useCartStore((state) => state.addToCart);
@@ -9,7 +10,7 @@ export default function ProductCard({ product }) {
       {/* Image */}
       <div className="relative w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden">
         <img
-          src={product.image}
+          src={getImageSrc(product.image)}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />

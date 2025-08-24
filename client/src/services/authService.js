@@ -34,7 +34,10 @@ export const register = async (name, email, password) => {
 // VERIFY OTP – backend activates account & returns JWT
 export const verifyOtp = async (email, otp) => {
   const { data } = await api.post("/auth/verify-otp", { email, otp });
-  if (data.token) localStorage.setItem("token", data.token);
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+  }
   return data;
 };
 
@@ -47,12 +50,18 @@ export const resendOtp = async (email) => {
 // LOGIN – only works for verified users
 export const login = async (email, password) => {
   const { data } = await api.post("/auth/login", { email, password });
-  if (data.token) localStorage.setItem("token", data.token);
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+  }
   return data;
 };
 
 // LOGOUT
-export const logout = () => localStorage.removeItem("token");
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+};
 
 // DATA
 export const getProfile = async () => (await api.get("/users/profile")).data;
@@ -64,7 +73,11 @@ export const googleLogin = async () => {
   const idToken = await result.user.getIdToken(true);
 
   const { data } = await api.post("/firebase-auth/login", { token: idToken });
-  localStorage.setItem("token", data.token);
-
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+  }
   return data.user;
 };
+
+export default api;

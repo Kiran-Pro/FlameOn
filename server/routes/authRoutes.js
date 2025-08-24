@@ -70,6 +70,7 @@ router.post("/register", async (req, res) => {
 
 // VERIFY OTP
 // Confirms OTP and activates account
+// VERIFY OTP
 router.post("/verify-otp", async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -95,7 +96,13 @@ router.post("/verify-otp", async (req, res) => {
 
     res.json({
       message: "Account verified successfully!",
-      user: { id: user._id, name: user.name, email: user.email },
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isVerified: user.isVerified,
+        isAdmin: user.isAdmin,
+      },
       token,
     });
   } catch (err) {
@@ -141,6 +148,7 @@ router.post("/resend-otp", async (req, res) => {
 });
 
 // LOGIN – only for verified users
+// LOGIN – only for verified users
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -164,7 +172,13 @@ router.post("/login", async (req, res) => {
     });
 
     res.json({
-      user: { id: user._id, name: user.name, email: user.email },
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isVerified: user.isVerified,
+        isAdmin: user.isAdmin,
+      },
       token,
     });
   } catch (error) {

@@ -16,6 +16,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyOtp from "./pages/VerifyOtp";
 import ScrollToTop from "./components/ScrollToTop";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   return (
@@ -50,6 +51,14 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute adminOnly>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer />
     </BrowserRouter>

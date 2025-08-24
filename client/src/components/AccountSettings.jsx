@@ -101,7 +101,7 @@ export default function AccountSettings({ user, setUser }) {
       {/* Editable Name */}
       <div className="flex items-center justify-between border-b py-3">
         <div className="flex items-center gap-3">
-          <FiUser className="h-5 w-5 text-indigo-500" />
+          <FiUser className="h-5 w-5 text-yellow-500" />
           <span className="font-medium">Name</span>
         </div>
         {editingField === "name" ? (
@@ -133,7 +133,7 @@ export default function AccountSettings({ user, setUser }) {
       {/* Editable Email */}
       <div className="flex items-center justify-between border-b py-3">
         <div className="flex items-center gap-3">
-          <FiMail className="h-5 w-5 text-indigo-500" />
+          <FiMail className="h-5 w-5 text-yellow-500" />
           <span className="font-medium">Email</span>
         </div>
         {editingField === "email" ? (
@@ -170,7 +170,7 @@ export default function AccountSettings({ user, setUser }) {
             setEditingField(editingField === "password" ? null : "password")
           }
         >
-          <FiKey className="h-5 w-5 text-indigo-500" />
+          <FiKey className="h-5 w-5 text-yellow-500" />
           <span className="font-medium">Change Password</span>
         </div>
 
@@ -202,7 +202,7 @@ export default function AccountSettings({ user, setUser }) {
             />
             <button
               type="submit"
-              className="w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600 transition"
+              className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition"
             >
               Update Password
             </button>
