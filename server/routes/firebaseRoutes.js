@@ -26,7 +26,7 @@ function initFirebaseAdmin() {
       credential: admin.credential.cert(serviceAccount),
     });
 
-    console.log("✅ Firebase Admin initialized");
+    console.log("Firebase Admin initialized");
   }
   return true;
 }
@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
 
     // Verify the Firebase ID token
     const decoded = await admin.auth().verifyIdToken(token);
-    console.log("✅ Firebase token verified for:", decoded.email);
+    console.log("Firebase token verified for:", decoded.email);
 
     // Find or create the user in MongoDB
     let user = await User.findOne({ email: decoded.email });

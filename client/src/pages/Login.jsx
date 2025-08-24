@@ -123,6 +123,14 @@ export default function Login() {
               {showPass ? <FiEyeOff /> : <FiEye />}
             </button>
           </div>
+          <div className="text-right">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-yellow-400 hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
           <button
             type="submit"

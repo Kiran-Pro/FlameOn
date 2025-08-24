@@ -41,7 +41,7 @@ router.put("/update-password", protect, async (req, res) => {
     user.password = await bcrypt.hash(newPassword, 10);
     await user.save();
 
-    res.json({ message: "✅ Password updated successfully" });
+    res.json({ message: "Password updated successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

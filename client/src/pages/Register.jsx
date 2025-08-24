@@ -8,23 +8,20 @@ import PasswordInput from "../components/PasswordInput.jsx";
 
 export default function Register() {
   const navigate = useNavigate();
-
-  // Alerts
   const [alert, setAlert] = useState(null);
 
-  // Form
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     confirm: "",
   });
+
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loadingEmail, setLoadingEmail] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
 
-  // Helpers
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -33,24 +30,35 @@ export default function Register() {
   const canSubmit =
     form.name.trim() && emailOk && form.password.length >= 6 && confirmOk;
 
-  // Email register
+  // Register with backend (OTP flow)
   const handleRegister = async (e) => {
     e.preventDefault();
     if (!canSubmit)
       return setAlert({ type: "error", text: "Fill the form correctly." });
+
     setLoadingEmail(true);
     try {
       await register(form.name.trim(), form.email.trim(), form.password);
-      setAlert({ type: "success", text: "✅ Account created! Redirecting..." });
-      setTimeout(() => navigate("/login"), 800);
-    } catch {
-      setAlert({ type: "error", text: "Registration failed. Try again." });
+      setAlert({
+        type: "success",
+        text: "OTP sent to your email. Verify to activate account.",
+      });
+
+      // go to OTP page
+      setTimeout(() => {
+        navigate("/verify-otp", { state: { email: form.email.trim() } });
+      }, 800);
+    } catch (err) {
+      setAlert({
+        type: "error",
+        text: err.response?.data?.message || "Registration failed. Try again.",
+      });
     } finally {
       setLoadingEmail(false);
     }
   };
 
-  // Google
+  // Google login (unchanged)
   const handleGoogle = async () => {
     setLoadingGoogle(true);
     setAlert(null);
@@ -61,9 +69,9 @@ export default function Register() {
         text: "Signed in with Google! Redirecting...",
       });
       setTimeout(() => navigate("/profile"), 800);
-    } catch (err) {
-      console.error("Google login error:", err);
+    } catch (error) {
       setAlert({ type: "error", text: "Google sign-in failed. Try again." });
+      console.log(error);
     } finally {
       setLoadingGoogle(false);
     }
@@ -79,7 +87,6 @@ export default function Register() {
           Join FlameOn in seconds
         </p>
 
-        {/* Email form */}
         <form onSubmit={handleRegister} className="mt-6 space-y-4">
           <Input
             icon={FiUser}
@@ -99,8 +106,6 @@ export default function Register() {
             onChange={handleChange}
             required
           />
-
-          {/* Password */}
           <PasswordInput
             name="password"
             value={form.password}
@@ -109,8 +114,6 @@ export default function Register() {
             show={showPass}
             setShow={setShowPass}
           />
-
-          {/* Confirm Password */}
           <PasswordInput
             name="confirm"
             value={form.confirm}
@@ -142,7 +145,6 @@ export default function Register() {
           <div className="flex-grow border-t border-white/20" />
         </div>
 
-        {/* Google */}
         <button
           onClick={handleGoogle}
           disabled={loadingGoogle}
@@ -154,7 +156,6 @@ export default function Register() {
           {loadingGoogle ? "Connecting..." : "Continue with Google"}
         </button>
 
-        {/* Alerts */}
         {alert && (
           <p
             className={`mt-4 text-center text-sm ${
