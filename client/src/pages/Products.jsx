@@ -3,6 +3,7 @@ import axios from "axios";
 import ProductCard from "../components/ProductCard";
 import { FaSearch } from "react-icons/fa";
 import { FaArrowDownWideShort } from "react-icons/fa6";
+import FlameLoader from "../components/loader/FlameLoader";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -11,8 +12,10 @@ export default function Products() {
   const [category, setCategory] = useState("");
   const [sort, setSort] = useState("");
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${import.meta.env.VITE_API}/products`)
       .then((res) => {
@@ -25,7 +28,8 @@ export default function Products() {
         ];
         setCategories(uniqueCats);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }, []);
 
   // filtering + sorting
@@ -46,6 +50,10 @@ export default function Products() {
 
     setFilteredProducts(updated);
   }, [searchQuery, category, sort, products]);
+
+  if (loading) {
+    return <FlameLoader />;
+  }
 
   return (
     <section className="relative py-20 bg-gradient-to-br from-gray-900 via-black to-gray-950 min-h-screen text-white">

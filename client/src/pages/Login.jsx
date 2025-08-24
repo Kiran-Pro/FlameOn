@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { useMemo, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { login, googleLogin } from "../services/authService.js";
+import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input/Input.jsx";
+import { googleLogin, login } from "../services/authService.js";
 
 export default function Login() {
   const navigate = useNavigate();

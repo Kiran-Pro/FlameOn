@@ -3,25 +3,42 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useCartStore } from "../store/cartStore";
 import { FaStar, FaTruck, FaTimes } from "react-icons/fa";
+import FlameLoader from "../components/loader/FlameLoader";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const addToCart = useCartStore((state) => state.addToCart);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(`${import.meta.env.VITE_API}/products/${id}`)
       .then((res) => setProduct(res.data))
-      .catch((err) => console.error("Error fetching product:", err));
+      .catch((err) => {
+        console.error("Error fetching product:", err);
+        setProduct(null);
+      })
+      .finally(() => setLoading(false));
   }, [id]);
+
+  if (loading) {
+    return <FlameLoader />;
+  }
 
   if (!product) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        <div className="animate-spin rounded-full h-14 w-14 border-4 border-yellow-400 border-t-transparent"></div>
-      </div>
+      <section className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-center text-white">
+        <h2 className="text-3xl font-bold mb-4">Product not found</h2>
+        <button
+          onClick={() => navigate("/products")}
+          className="bg-gradient-to-r from-yellow-400 to-orange-500 px-6 py-3 rounded-full font-semibold text-gray-900 shadow hover:from-yellow-500 hover:to-orange-600 transition"
+        >
+          Back to Menu
+        </button>
+      </section>
     );
   }
 
@@ -86,6 +103,7 @@ export default function ProductDetail() {
         </div>
       </div>
 
+      {/* Mobile Sticky Add to Cart */}
       <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-yellow-400 to-orange-500 p-4 shadow-xl md:hidden">
         <button
           onClick={() => addToCart(product)}

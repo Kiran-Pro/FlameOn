@@ -6,6 +6,9 @@ import {
   FaCog,
   FaSignOutAlt,
   FaSignInAlt,
+  FaReceipt,
+  FaRupeeSign,
+  FaMedal,
 } from "react-icons/fa";
 
 import { logout, getProfile, getOrders } from "../services/authService";
@@ -103,39 +106,39 @@ export default function Profile() {
         {/* Content */}
         <div>
           {activeTab === "info" && (
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-xl p-8 border border-gray-100">
-              {/* Decorative gradient accent */}
+            <div className="relative overflow-hidden rounded-2xl bg-white shadow-xl p-8 border border-gray-100">
+              {/* Gradient accent */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-yellow-200 to-orange-300 rounded-bl-[100px] opacity-20 pointer-events-none"></div>
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
                 {/* Orders Count */}
-                <div className="bg-gray-50 rounded-xl py-4 shadow-sm hover:shadow-md transition">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                    Orders
+                <div className="bg-gray-50 rounded-xl py-6 shadow hover:shadow-md transition transform hover:scale-[1.02]">
+                  <p className="text-xs uppercase tracking-wide text-gray-500 flex justify-center items-center gap-2">
+                    <FaReceipt className="text-yellow-500" /> Orders
                   </p>
-                  <p className="text-lg font-semibold text-gray-900">
+                  <p className="text-2xl font-extrabold text-gray-900 mt-2">
                     {orders.length}
                   </p>
                 </div>
 
                 {/* Total Spent */}
-                <div className="bg-gray-50 rounded-xl py-4 shadow-sm hover:shadow-md transition">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                    Total Spent
+                <div className="bg-gray-50 rounded-xl py-6 shadow hover:shadow-md transition transform hover:scale-[1.02]">
+                  <p className="text-xs uppercase tracking-wide text-gray-500 flex justify-center items-center gap-2">
+                    <FaRupeeSign className="text-yellow-500" /> Total Spent
                   </p>
-                  <p className="text-lg font-semibold text-gray-900">
+                  <p className="text-2xl font-extrabold text-yellow-500 mt-2">
                     ₹{orders.reduce((sum, order) => sum + order.totalPrice, 0)}
                   </p>
                 </div>
 
                 {/* Loyalty Level */}
-                <div className="bg-gray-50 rounded-xl py-4 shadow-sm hover:shadow-md transition">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide">
-                    Loyalty
+                <div className="bg-gray-50 rounded-xl py-6 shadow hover:shadow-md transition transform hover:scale-[1.02]">
+                  <p className="text-xs uppercase tracking-wide text-gray-500 flex justify-center items-center gap-2">
+                    <FaMedal className="text-yellow-500" /> Loyalty
                   </p>
                   <p
-                    className={`text-lg font-semibold ${
+                    className={`text-2xl font-extrabold mt-2 ${
                       orders.length > 10
                         ? "text-yellow-600"
                         : orders.length > 5
@@ -164,8 +167,9 @@ export default function Profile() {
                     key={order._id}
                     className="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition border border-transparent hover:border-yellow-400/40"
                   >
-                    <div className="flex justify-between items-center mb-3">
-                      <h4 className="font-semibold">
+                    {/* Header */}
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="font-bold text-gray-800">
                         Order #{order._id.slice(-6)}
                       </h4>
                       <span
@@ -180,12 +184,28 @@ export default function Profile() {
                         {order.status || "Pending"}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">
-                      {order.cart.map((item) => item.name).join(", ")}
-                    </p>
-                    <p className="font-bold text-yellow-600">
-                      ₹{order.totalPrice}
-                    </p>
+
+                    {/* Items */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {order.cart.map((item, i) => (
+                        <span
+                          key={i}
+                          className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600"
+                        >
+                          {item.name} × {item.quantity}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Total */}
+                    <div className="flex justify-between items-center">
+                      <p className="text-sm text-gray-500">
+                        {new Date(order.createdAt).toLocaleDateString()}
+                      </p>
+                      <p className="font-bold text-lg bg-gradient-to-r from-yellow-500 to-orange-500 text-transparent bg-clip-text">
+                        ₹{order.totalPrice}
+                      </p>
+                    </div>
                   </div>
                 ))
               )}

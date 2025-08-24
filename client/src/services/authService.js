@@ -20,6 +20,7 @@ api.interceptors.response.use(
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
     return Promise.reject(err);
   }
@@ -69,15 +70,20 @@ export const getOrders = async () => (await api.get("/orders")).data;
 
 // GOOGLE LOGIN
 export const googleLogin = async () => {
-  const result = await signInWithPopup(auth, googleProvider);
-  const idToken = await result.user.getIdToken(true);
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const idToken = await result.user.getIdToken(true);
 
-  const { data } = await api.post("/firebase-auth/login", { token: idToken });
-  if (data.token) {
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    const { data } = await api.post("/firebase-auth/login", { token: idToken });
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+    }
+    return data.user;
+  } catch (err) {
+    console.error("Google login error:", err);
+    throw err;
   }
-  return data.user;
 };
 
 export default api;

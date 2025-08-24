@@ -115,14 +115,14 @@ export default function AccountSettings({ user, setUser }) {
             />
             <button
               onClick={saveNameEmail}
-              className="px-3 py-1 bg-indigo-500 text-white rounded-lg"
+              className="px-3 py-1 bg-yellow-500 text-white rounded-lg"
             >
               Save
             </button>
           </div>
         ) : (
           <span
-            className="text-gray-600 cursor-pointer hover:text-indigo-600"
+            className="text-gray-600 cursor-pointer hover:text-yellow-600"
             onClick={() => setEditingField("name")}
           >
             {form.name}
@@ -147,14 +147,14 @@ export default function AccountSettings({ user, setUser }) {
             />
             <button
               onClick={saveNameEmail}
-              className="px-3 py-1 bg-indigo-500 text-white rounded-lg"
+              className="px-3 py-1 bg-yellow-500 text-white rounded-lg"
             >
               Save
             </button>
           </div>
         ) : (
           <span
-            className="text-gray-600 cursor-pointer hover:text-indigo-600"
+            className="text-gray-600 cursor-pointer hover:text-yellow-600"
             onClick={() => setEditingField("email")}
           >
             {form.email}
