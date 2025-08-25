@@ -148,7 +148,6 @@ router.post("/resend-otp", async (req, res) => {
 });
 
 // LOGIN – only for verified users
-// LOGIN – only for verified users
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
