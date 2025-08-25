@@ -1,15 +1,14 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import getAuthState from "../../services/getAuth";
 
 export default function ProtectedRoute({ children, adminOnly = false }) {
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+  const location = useLocation();
+  const { isAuthed, user } = getAuthState();
 
-  // Not logged in
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  if (!isAuthed) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  // Logged in but not admin
   if (adminOnly && !user?.isAdmin) {
     return <Navigate to="/403" replace />;
   }

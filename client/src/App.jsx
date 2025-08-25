@@ -18,9 +18,10 @@ import VerifyOtp from "./pages/VerifyOtp";
 import ScrollToTop from "./components/ScrollToTop";
 import AdminDashboard from "./pages/AdminDashboard";
 import Forbidden from "./pages/Forbidden";
+import getAuthState from "./services/getAuth";
 
-function App() {
-  const user = JSON.parse(localStorage.getItem("user"));
+export default function App() {
+  const { isAuthed } = getAuthState();
 
   return (
     <BrowserRouter>
@@ -32,17 +33,17 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
 
-        {/* Auth Routes*/}
+        {/* Auth Routes: redirect ONLY if fully authenticated */}
         <Route
           path="/login"
-          element={user ? <Navigate to="/profile" /> : <Login />}
+          element={isAuthed ? <Navigate to="/profile" replace /> : <Login />}
         />
         <Route
           path="/register"
-          element={user ? <Navigate to="/profile" /> : <Register />}
+          element={isAuthed ? <Navigate to="/profile" replace /> : <Register />}
         />
 
-        {/* Forgot/Reset Password & OTP*/}
+        {/* Forgot/Reset Password & OTP */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/reset-password" element={<ResetPassword />} />
@@ -91,16 +92,12 @@ function App() {
           }
         />
 
-        {/*Not found route*/}
-        <Route path="*" element={<NotFound />} />
-
-        {/* Forbidden route */}
+        {/* Forbidden & 404 */}
         <Route path="/403" element={<Forbidden />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Footer />
     </BrowserRouter>
   );
 }
-
-export default App;
