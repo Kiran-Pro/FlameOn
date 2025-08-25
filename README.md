@@ -133,6 +133,17 @@ npm i -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 ```
 
+## Testing Credentials - User and Admin
+
+User
+Register with real email to recieve updates (Recommended)
+
+Admin
+```text
+Email - krc2win@gmail.com
+Pass - Qwerty@1234
+```
+
 ### Testing Credentials - RazorPay
 
 1) Card
