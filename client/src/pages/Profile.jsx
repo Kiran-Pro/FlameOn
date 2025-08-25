@@ -15,6 +15,7 @@ import {
 import { logout, getProfile, getOrders } from "../services/authService";
 import AccountSettings from "../components/AccountSettings.jsx";
 import { useNavigate } from "react-router-dom";
+import FlameLoader from "../components/loader/FlameLoader.jsx";
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("info");
@@ -50,7 +51,7 @@ export default function Profile() {
   if (loading) {
     return (
       <section className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-500">Loading...</p>
+        <FlameLoader />
       </section>
     );
   }
