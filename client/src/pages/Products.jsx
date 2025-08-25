@@ -1,15 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
-import { FaSearch } from "react-icons/fa";
-import { FaArrowDownWideShort, FaXmark, FaFilter } from "react-icons/fa6";
+import { FaSearch, FaUtensils } from "react-icons/fa";
+import {
+  FaArrowDownWideShort,
+  FaXmark,
+  FaFilter,
+  FaPlateWheat,
+} from "react-icons/fa6";
 import FlameLoader from "../components/loader/FlameLoader";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState("");
-  const [sort, setSort] = useState(""); // "", "low", "high", "az", "za"
+  const [sort, setSort] = useState("");
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,7 +81,6 @@ export default function Products() {
         updated.sort((a, b) => (b.name || "").localeCompare(a.name || ""));
         break;
       default:
-        // keep API order
         break;
     }
 
@@ -89,7 +93,6 @@ export default function Products() {
     setSearchQuery("");
     setCategory("");
     setSort("");
-    // no need to set filtered state; useMemo handles it
   };
 
   if (loading) return <FlameLoader />;
@@ -216,7 +219,7 @@ export default function Products() {
         {filteredProducts.length === 0 ? (
           <div className="mt-16 text-center">
             <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-white/10 flex items-center justify-center text-2xl">
-              🍽️
+              <FaUtensils className="text-gray-500" />
             </div>
             <h3 className="text-xl font-semibold">No items found</h3>
             <p className="mt-2 text-gray-400">

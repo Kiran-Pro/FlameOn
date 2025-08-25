@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useCartStore } from "../store/cartStore";
 import { Link } from "react-router-dom";
 import getImageSrc from "../utils/getImageSrc";
+import { FaUtensils } from "react-icons/fa";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, emptyCart } = useCartStore();
@@ -53,7 +54,8 @@ export default function Cart() {
   if (cart.length === 0) {
     return (
       <section className="py-20 bg-gray-100 min-h-screen flex flex-col items-center justify-center text-center">
-        <h2 className="text-3xl font-extrabold text-gray-800 mb-4">
+        <h2 className="text-3xl font-extrabold text-gray-800 mb-4 flex items-center gap-2">
+          <FaUtensils className="text-yellow-500" />
           Your plate is empty!
         </h2>
         <p className="text-gray-600 mb-6">

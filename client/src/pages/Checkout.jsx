@@ -27,34 +27,105 @@ export default function Checkout() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  //Lazy-load Razorpay script
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (document.querySelector("#razorpay-script")) return resolve(true);
+      const script = document.createElement("script");
+      script.id = "razorpay-script";
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (form.payment === "cod") {
+      //COD Flow: save directly in DB
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API}/orders`,
+          { ...form, cart, totalPrice },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        const orderId = response.data?._id || "ORD12345";
+        useCartStore.getState().emptyCart();
+        navigate("/order-confirmation", { state: { orderId, totalPrice } });
+      } catch (err) {
+        console.error("Error placing COD order:", err);
+        alert("Error placing order. Please try again.");
+      }
+      return;
+    }
+
+    //Razorpay Flow
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API}/orders`,
-        {
-          ...form,
-          cart,
-          totalPrice,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
+      //ensure Razorpay script is loaded
+      const loaded = await loadRazorpayScript();
+      if (!loaded) {
+        alert("Failed to load Razorpay SDK. Please check your connection.");
+        return;
+      }
+
+      //create order on backend
+      const { data: razorpayOrder } = await axios.post(
+        `${import.meta.env.VITE_API}/payments/create-order`,
+        { amount: totalPrice }
       );
 
-      const orderId = response.data?._id || "ORD12345";
-      console.log(response.data);
+      //open Razorpay checkout
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        order_id: razorpayOrder.id,
+        name: "FlameOn Restaurant",
+        description: "Test Transaction",
+        handler: async function (response) {
+          //verify payment
+          await axios.post(`${import.meta.env.VITE_API}/payments/verify`, {
+            orderId: response.razorpay_order_id,
+            paymentId: response.razorpay_payment_id,
+            signature: response.razorpay_signature,
+          });
 
-      useCartStore.getState().emptyCart();
+          //save order in DB
+          await axios.post(
+            `${import.meta.env.VITE_API}/orders`,
+            {
+              ...form,
+              cart,
+              totalPrice,
+              paymentId: response.razorpay_payment_id,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
 
-      navigate("/order-confirmation", {
-        state: { orderId, totalPrice },
-      });
+          useCartStore.getState().emptyCart();
+          navigate("/order-confirmation", {
+            state: { orderId: response.razorpay_order_id, totalPrice },
+          });
+        },
+        theme: { color: "#F37254" },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (err) {
-      console.error("Error placing order:", err);
-      alert("Error placing order. Please try again.");
+      console.error("Payment error:", err);
+      alert("Payment failed, please try again.");
     }
   };
 
@@ -131,6 +202,7 @@ export default function Checkout() {
                   className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
                 />
               </div>
+
               <div className="relative">
                 <FaPhone
                   className="absolute left-3 top-3 text-gray-400"
