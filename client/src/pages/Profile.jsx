@@ -9,6 +9,8 @@ import {
   FaReceipt,
   FaRupeeSign,
   FaMedal,
+  FaSort,
+  FaFilter,
 } from "react-icons/fa";
 import { logout, getProfile, getOrders } from "../services/authService";
 import AccountSettings from "../components/AccountSettings.jsx";
@@ -19,6 +21,8 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState("recent");
+  const [statusFilter, setStatusFilter] = useState("all");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,7 +55,6 @@ export default function Profile() {
     );
   }
 
-  // Logged-out fallback
   if (!user) {
     return (
       <section className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -71,6 +74,19 @@ export default function Profile() {
       </section>
     );
   }
+
+  // Apply filters + sort
+  let filteredOrders = [...orders];
+  if (statusFilter !== "all") {
+    filteredOrders = filteredOrders.filter(
+      (o) => (o.status || "Pending").toLowerCase() === statusFilter
+    );
+  }
+  const sortedOrders = filteredOrders.sort((a, b) =>
+    sortOrder === "recent"
+      ? new Date(b.createdAt) - new Date(a.createdAt)
+      : new Date(a.createdAt) - new Date(b.createdAt)
+  );
 
   return (
     <section className="min-h-screen py-16 sm:py-20 bg-gradient-to-br from-indigo-50 via-white to-indigo-100 text-gray-900">
@@ -111,27 +127,19 @@ export default function Profile() {
         {/* Content */}
         <div>
           {activeTab === "info" && (
-            <div className="relative overflow-hidden rounded-2xl bg-white shadow-xl p-6 sm:p-8 border border-gray-100">
-              <div className="absolute top-0 right-0 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-yellow-200 to-orange-300 rounded-bl-[100px] opacity-20 pointer-events-none"></div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-center">
-                {/* Orders Count */}
-                <div className="bg-gray-50 rounded-xl py-5 shadow hover:shadow-md transition transform hover:scale-[1.02]">
-                  <p className="text-xs uppercase tracking-wide text-gray-500 flex justify-center items-center gap-1 sm:gap-2">
+            <div className="rounded-2xl bg-white shadow-xl p-6 sm:p-8 border border-gray-100">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                <div className="bg-gray-50 rounded-xl py-5 shadow">
+                  <p className="text-xs uppercase text-gray-500 flex justify-center items-center gap-2">
                     <FaReceipt className="text-yellow-500" /> Orders
                   </p>
-                  <p className="text-xl sm:text-2xl font-extrabold text-gray-900 mt-2">
-                    {orders.length}
-                  </p>
+                  <p className="text-2xl font-extrabold">{orders.length}</p>
                 </div>
-
-                {/* Total Spent */}
-                <div className="bg-gray-50 rounded-xl py-5 shadow hover:shadow-md transition transform hover:scale-[1.02]">
-                  <p className="text-xs uppercase tracking-wide text-gray-500 flex justify-center items-center gap-1 sm:gap-2">
+                <div className="bg-gray-50 rounded-xl py-5 shadow">
+                  <p className="text-xs uppercase text-gray-500 flex justify-center items-center gap-2">
                     <FaRupeeSign className="text-yellow-500" /> Total Spent
                   </p>
-                  <p className="text-xl sm:text-2xl font-extrabold text-yellow-500 mt-2">
+                  <p className="text-2xl font-extrabold text-yellow-500">
                     ₹
                     {orders.reduce(
                       (sum, o) => sum + (Number(o?.totalPrice) || 0),
@@ -139,14 +147,12 @@ export default function Profile() {
                     )}
                   </p>
                 </div>
-
-                {/* Loyalty Level */}
-                <div className="bg-gray-50 rounded-xl py-5 shadow hover:shadow-md transition transform hover:scale-[1.02]">
-                  <p className="text-xs uppercase tracking-wide text-gray-500 flex justify-center items-center gap-1 sm:gap-2">
+                <div className="bg-gray-50 rounded-xl py-5 shadow">
+                  <p className="text-xs uppercase text-gray-500 flex justify-center items-center gap-2">
                     <FaMedal className="text-yellow-500" /> Loyalty
                   </p>
                   <p
-                    className={`text-xl sm:text-2xl font-extrabold mt-2 ${
+                    className={`text-2xl font-extrabold ${
                       orders.length > 10
                         ? "text-yellow-600"
                         : orders.length > 5
@@ -166,24 +172,56 @@ export default function Profile() {
           )}
 
           {activeTab === "orders" && (
-            <div className="space-y-4 sm:space-y-5">
-              {orders.length === 0 ? (
-                <p className="text-center text-gray-500 text-sm sm:text-base">
-                  No orders yet.
+            <div className="space-y-4">
+              {/* Filter Controls */}
+              <div className="bg-white rounded-xl p-4 shadow flex flex-col sm:flex-row gap-3 sm:gap-6 items-start sm:items-center justify-between">
+                <div className="flex items-center gap-2 text-gray-600 font-medium">
+                  <FaFilter className="text-yellow-500" />
+                  <span>Filter Orders</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {/* Status Filter */}
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
+                  >
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="preparing">Preparing</option>
+                    <option value="delivered">Delivered</option>
+                  </select>
+
+                  {/* Sort Filter */}
+                  <select
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
+                  >
+                    <option value="recent">Most Recent</option>
+                    <option value="oldest">Oldest First</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Orders */}
+              {sortedOrders.length === 0 ? (
+                <p className="text-center text-gray-500">
+                  No orders match the selected filters.
                 </p>
               ) : (
-                orders.map((order) => (
+                sortedOrders.map((order) => (
                   <div
                     key={order._id}
-                    className="bg-white rounded-2xl p-4 sm:p-6 shadow-md hover:shadow-xl transition border border-transparent hover:border-yellow-400/40"
+                    className="bg-white rounded-2xl p-4 sm:p-6 shadow-md hover:shadow-xl transition border hover:border-yellow-400/40"
                   >
-                    {/* Header */}
-                    <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-3 sm:mb-4 gap-2 sm:gap-0">
+                    {/* Header row */}
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-3 gap-2">
                       <h4 className="font-bold text-gray-800 text-sm sm:text-base">
                         Order #{order._id.slice(-6)}
                       </h4>
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium self-start sm:self-center ${
+                        className={`px-3 py-1 rounded-full text-xs font-medium w-fit ${
                           order.status === "Delivered"
                             ? "bg-green-100 text-green-700"
                             : order.status === "Shipped"
@@ -196,19 +234,19 @@ export default function Profile() {
                     </div>
 
                     {/* Items */}
-                    <div className="flex flex-wrap gap-2 mb-2 sm:mb-3">
+                    <div className="flex flex-wrap gap-2 mb-3">
                       {order.cart.map((item, i) => (
                         <span
                           key={i}
-                          className="px-2 sm:px-3 py-1 bg-gray-100 rounded-full text-xs sm:text-sm text-gray-600"
+                          className="px-2 py-1 bg-gray-100 rounded-full text-xs sm:text-sm text-gray-600"
                         >
                           {item.name} × {item.quantity}
                         </span>
                       ))}
                     </div>
 
-                    {/* Total */}
-                    <div className="flex justify-between items-center">
+                    {/* Footer row */}
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
                       <p className="text-xs sm:text-sm text-gray-500">
                         {new Date(order.createdAt).toLocaleDateString()}
                       </p>
@@ -230,7 +268,7 @@ export default function Profile() {
         {/* Logout */}
         <button
           onClick={handleLogout}
-          className="mt-10 w-full bg-gradient-to-r from-red-500 to-red-600 py-2.5 sm:py-3 rounded-xl font-semibold text-white shadow hover:scale-[1.02] active:scale-95 transition text-sm sm:text-base"
+          className="mt-10 w-full bg-gradient-to-r from-red-500 to-red-600 py-3 rounded-xl font-semibold text-white shadow hover:scale-[1.02] active:scale-95 transition"
         >
           <div className="flex items-center justify-center gap-2">
             <FaSignOutAlt className="h-4 w-4 sm:h-5 sm:w-5" /> Logout
