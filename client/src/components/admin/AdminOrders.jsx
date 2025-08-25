@@ -5,7 +5,6 @@ export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
   const [message, setMessage] = useState("");
 
-  // Load all orders
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -18,7 +17,6 @@ export default function AdminOrders() {
     fetchOrders();
   }, []);
 
-  // Update order status
   const updateStatus = async (id, status) => {
     try {
       const res = await api.put(`/admin/orders/${id}/status`, { status });
@@ -28,14 +26,12 @@ export default function AdminOrders() {
         )
       );
       setMessage(`Order marked as ${status}`);
-    } catch (err) {
-      console.error("Failed to update order:", err);
+    } catch {
       setMessage("Failed to update order");
     }
     setTimeout(() => setMessage(""), 3000);
   };
 
-  // Badge color helper
   const getStatusBadge = (status) => {
     const base = "px-3 py-1 text-xs font-bold rounded-full";
     switch (status) {
@@ -60,7 +56,8 @@ export default function AdminOrders() {
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 gap-6">
+      {/* Grid Layout - responsive */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {orders.map((order) => (
           <div
             key={order._id}
@@ -81,7 +78,7 @@ export default function AdminOrders() {
               </span>
             </div>
 
-            {/* Order details */}
+            {/* Details */}
             <div className="space-y-2 text-sm text-gray-700 mb-3">
               <p>
                 <b>Total:</b> ₹{order.totalPrice}
@@ -97,7 +94,7 @@ export default function AdminOrders() {
               )}
             </div>
 
-            {/* Ordered items */}
+            {/* Items */}
             <div className="bg-gray-50 rounded-lg p-3 mb-4">
               <p className="font-semibold text-gray-800 mb-2">🛒 Items:</p>
               <ul className="space-y-2">
@@ -118,7 +115,7 @@ export default function AdminOrders() {
             </div>
 
             {/* Status Controls */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {["Pending", "Preparing", "Delivered"].map((s) => (
                 <button
                   key={s}

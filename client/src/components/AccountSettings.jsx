@@ -1,6 +1,5 @@
 import { useState } from "react";
 import axios from "axios";
-
 import {
   FiUser,
   FiMail,
@@ -78,51 +77,49 @@ export default function AccountSettings({ user, setUser }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow p-6 space-y-6">
-      <h3 className="text-xl font-semibold mb-4">Account Settings</h3>
+    <div className="bg-white rounded-2xl shadow p-5 sm:p-6 space-y-6">
+      <h3 className="text-lg sm:text-xl font-semibold mb-2">
+        Account Settings
+      </h3>
 
       {message && (
         <div
-          className={`flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium ${
+          className={`flex items-center gap-2 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-medium ${
             success
               ? "bg-green-100 text-green-700 border border-green-300"
               : "bg-red-100 text-red-700 border border-red-300"
           }`}
         >
-          {success ? (
-            <FiCheckCircle size={18} />
-          ) : (
-            <FiAlertTriangle size={18} />
-          )}
+          {success ? <FiCheckCircle /> : <FiAlertTriangle />}
           {message}
         </div>
       )}
 
       {/* Editable Name */}
-      <div className="flex items-center justify-between border-b py-3">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b py-3 gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
           <FiUser className="h-5 w-5 text-yellow-500" />
           <span className="font-medium">Name</span>
         </div>
         {editingField === "name" ? (
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <input
               type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
-              className="border rounded-lg px-3 py-1"
+              className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
             />
             <button
               onClick={saveNameEmail}
-              className="px-3 py-1 bg-yellow-500 text-white rounded-lg"
+              className="px-4 py-2 bg-yellow-500 text-white rounded-lg text-sm hover:bg-yellow-600 transition"
             >
               Save
             </button>
           </div>
         ) : (
           <span
-            className="text-gray-600 cursor-pointer hover:text-yellow-600"
+            className="text-gray-600 cursor-pointer hover:text-yellow-600 text-sm sm:text-base"
             onClick={() => setEditingField("name")}
           >
             {form.name}
@@ -131,30 +128,30 @@ export default function AccountSettings({ user, setUser }) {
       </div>
 
       {/* Editable Email */}
-      <div className="flex items-center justify-between border-b py-3">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b py-3 gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
           <FiMail className="h-5 w-5 text-yellow-500" />
           <span className="font-medium">Email</span>
         </div>
         {editingField === "email" ? (
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="border rounded-lg px-3 py-1"
+              className="flex-1 border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
             />
             <button
               onClick={saveNameEmail}
-              className="px-3 py-1 bg-yellow-500 text-white rounded-lg"
+              className="px-4 py-2 bg-yellow-500 text-white rounded-lg text-sm hover:bg-yellow-600 transition"
             >
               Save
             </button>
           </div>
         ) : (
           <span
-            className="text-gray-600 cursor-pointer hover:text-yellow-600"
+            className="text-gray-600 cursor-pointer hover:text-yellow-600 text-sm sm:text-base"
             onClick={() => setEditingField("email")}
           >
             {form.email}
@@ -162,10 +159,10 @@ export default function AccountSettings({ user, setUser }) {
         )}
       </div>
 
-      {/* To change Password */}
+      {/* Change Password */}
       <div className="space-y-3 pt-2">
         <div
-          className="flex items-center gap-3 cursor-pointer"
+          className="flex items-center gap-2 sm:gap-3 cursor-pointer"
           onClick={() =>
             setEditingField(editingField === "password" ? null : "password")
           }
@@ -182,7 +179,7 @@ export default function AccountSettings({ user, setUser }) {
               placeholder="Current Password"
               value={form.currentPassword}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
             />
             <input
               type="password"
@@ -190,7 +187,7 @@ export default function AccountSettings({ user, setUser }) {
               placeholder="New Password"
               value={form.newPassword}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
             />
             <input
               type="password"
@@ -198,7 +195,7 @@ export default function AccountSettings({ user, setUser }) {
               placeholder="Confirm Password"
               value={form.confirmPassword}
               onChange={handleChange}
-              className="w-full border rounded-lg px-3 py-2"
+              className="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-yellow-400 outline-none"
             />
             <button
               type="submit"

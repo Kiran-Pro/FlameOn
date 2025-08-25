@@ -30,7 +30,6 @@ export default function Register() {
   const canSubmit =
     form.name.trim() && emailOk && form.password.length >= 6 && confirmOk;
 
-  // Register with backend (OTP flow)
   const handleRegister = async (e) => {
     e.preventDefault();
     if (!canSubmit)
@@ -44,7 +43,6 @@ export default function Register() {
         text: "OTP sent to your email. Verify to activate account.",
       });
 
-      // go to OTP page
       setTimeout(() => {
         navigate("/verify-otp", { state: { email: form.email.trim() } });
       }, 800);
@@ -58,7 +56,6 @@ export default function Register() {
     }
   };
 
-  // Google login (unchanged)
   const handleGoogle = async () => {
     setLoadingGoogle(true);
     setAlert(null);
@@ -78,15 +75,17 @@ export default function Register() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4">
-      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-6 sm:p-8 mt-16">
-        <h1 className="text-3xl font-bold text-center text-white">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4 sm:px-6">
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-5 sm:p-8 mt-16">
+        {/* Header */}
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-white">
           Create <span className="text-yellow-400">Account</span>
         </h1>
-        <p className="text-center text-gray-300 mt-2 text-sm">
+        <p className="text-center text-gray-300 mt-2 text-sm sm:text-base">
           Join FlameOn in seconds
         </p>
 
+        {/* Form */}
         <form onSubmit={handleRegister} className="mt-6 space-y-4">
           <Input
             icon={FiUser}
@@ -123,13 +122,15 @@ export default function Register() {
             setShow={setShowConfirm}
           />
           {!confirmOk && form.confirm && (
-            <p className="text-xs text-red-400">Passwords do not match.</p>
+            <p className="text-xs sm:text-sm text-red-400">
+              Passwords do not match.
+            </p>
           )}
 
           <button
             type="submit"
             disabled={!canSubmit || loadingEmail}
-            className={`w-full font-semibold py-3 rounded-lg shadow-lg transition ${
+            className={`w-full font-semibold py-3 sm:py-3.5 rounded-lg shadow-lg transition text-sm sm:text-base ${
               !canSubmit || loadingEmail
                 ? "bg-gray-500 text-gray-200 cursor-not-allowed"
                 : "bg-yellow-400 text-gray-900 hover:bg-yellow-300"
@@ -139,16 +140,18 @@ export default function Register() {
           </button>
         </form>
 
+        {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-white/20" />
-          <span className="px-3 text-gray-300 text-sm">OR</span>
+          <span className="px-3 text-gray-300 text-xs sm:text-sm">OR</span>
           <div className="flex-grow border-t border-white/20" />
         </div>
 
+        {/* Google button */}
         <button
           onClick={handleGoogle}
           disabled={loadingGoogle}
-          className={`w-full flex items-center justify-center gap-3 bg-white text-gray-900 py-3 rounded-lg border border-gray-200 shadow hover:bg-gray-50 transition ${
+          className={`w-full flex items-center justify-center gap-3 bg-white text-gray-900 py-3 sm:py-3.5 rounded-lg border border-gray-200 shadow hover:bg-gray-50 transition text-sm sm:text-base ${
             loadingGoogle ? "opacity-70 cursor-not-allowed" : ""
           }`}
         >
@@ -156,9 +159,10 @@ export default function Register() {
           {loadingGoogle ? "Connecting..." : "Continue with Google"}
         </button>
 
+        {/* Alerts */}
         {alert && (
           <p
-            className={`mt-4 text-center text-sm ${
+            className={`mt-4 text-center text-sm sm:text-base ${
               alert.type === "success" ? "text-green-400" : "text-red-400"
             }`}
           >
@@ -166,7 +170,8 @@ export default function Register() {
           </p>
         )}
 
-        <p className="mt-6 text-center text-gray-300 text-sm">
+        {/* Footer link */}
+        <p className="mt-6 text-center text-gray-300 text-sm sm:text-base">
           Already have an account?{" "}
           <Link to="/login" className="text-yellow-400 hover:underline">
             Login

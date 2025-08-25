@@ -40,19 +40,20 @@ export default function ResetPassword() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4 sm:px-6">
       <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-6 sm:p-8 mt-16">
-        <h1 className="text-2xl font-bold text-center text-white">
-          Reset Password
+        {/* Heading */}
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-white">
+          Reset <span className="text-yellow-400">Password</span>
         </h1>
-        <p className="text-center text-gray-300 mt-2 text-sm">
-          Enter a new password
+        <p className="text-center text-gray-300 mt-2 text-sm sm:text-base">
+          Enter your new password below
         </p>
 
         {/* Alert */}
         {alert && (
           <div
-            className={`mt-4 text-center text-sm px-3 py-2 rounded-lg ${
+            className={`mt-4 text-center text-sm sm:text-base px-3 py-2 rounded-lg ${
               alert.type === "success"
                 ? "bg-green-500/10 text-green-300 border border-green-400/30"
                 : "bg-red-500/10 text-red-300 border border-red-400/30"
@@ -60,12 +61,12 @@ export default function ResetPassword() {
           >
             {alert.text}
             {alert.type === "error" && (
-              <div className="mt-3 flex justify-center gap-4">
+              <div className="mt-3 flex flex-col sm:flex-row justify-center gap-3">
                 <Link
                   to="/forgot-password"
                   className="text-yellow-400 hover:underline"
                 >
-                  Request new reset link
+                  Request new link
                 </Link>
                 <Link to="/login" className="text-yellow-400 hover:underline">
                   Back to Login
@@ -76,15 +77,15 @@ export default function ResetPassword() {
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <input
             type="password"
             placeholder="New password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 
-                       text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-2.5 sm:py-3 
+                       text-sm sm:text-base text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none"
           />
 
           <input
@@ -93,14 +94,14 @@ export default function ResetPassword() {
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             required
-            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 
-                       text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none"
+            className="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-2.5 sm:py-3 
+                       text-sm sm:text-base text-white placeholder-gray-300 focus:ring-2 focus:ring-yellow-400 outline-none"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-lg font-semibold shadow-lg transition ${
+            className={`w-full py-2.5 sm:py-3 rounded-lg font-semibold shadow-lg transition text-sm sm:text-base ${
               loading
                 ? "bg-gray-500 text-gray-200 cursor-not-allowed"
                 : "bg-yellow-400 text-gray-900 hover:bg-yellow-300"
@@ -110,11 +111,13 @@ export default function ResetPassword() {
           </button>
         </form>
 
-        <div className="mt-6 text-center">
+        {/* Back */}
+        <p className="mt-6 text-center text-gray-300 text-sm sm:text-base">
+          Remembered your password?{" "}
           <Link to="/login" className="text-yellow-400 hover:underline">
-            ← Back to Login
+            Back to Login
           </Link>
-        </div>
+        </p>
       </div>
     </section>
   );

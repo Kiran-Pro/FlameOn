@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import api from "../../../services/authService.js";
 import getImageSrc from "../../../utils/getImageSrc.js";
-import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 
 export default function ProductTable({
   products,
@@ -17,11 +17,9 @@ export default function ProductTable({
   const [filterCategory, setFilterCategory] = useState("");
   const [sort, setSort] = useState("");
 
-  //Filter + Sort Logic
+  // filter + sort
   const filteredProducts = useMemo(() => {
     let list = [...products];
-
-    // search
     if (search.trim()) {
       list = list.filter(
         (p) =>
@@ -29,15 +27,11 @@ export default function ProductTable({
           p.description.toLowerCase().includes(search.toLowerCase())
       );
     }
-
-    // category
     if (filterCategory) {
       list = list.filter(
         (p) => p.category?.toLowerCase() === filterCategory.toLowerCase()
       );
     }
-
-    // sort
     if (sort === "low") list.sort((a, b) => a.price - b.price);
     else if (sort === "high") list.sort((a, b) => b.price - a.price);
 
@@ -46,13 +40,7 @@ export default function ProductTable({
 
   const handleEdit = (product) => {
     setEditingId(product._id);
-    setForm({
-      name: product.name,
-      price: product.price,
-      description: product.description,
-      image: product.image,
-      category: product.category,
-    });
+    setForm(product);
     setFile(null);
     setShowModal(true);
   };
@@ -69,14 +57,12 @@ export default function ProductTable({
     hideMessage();
   };
 
-  // get unique categories
   const categories = [...new Set(products.map((p) => p.category))];
 
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
-      {/* Search + Filters */}
+      {/* Filters */}
       <div className="flex flex-wrap gap-4 mb-6 items-center justify-between">
-        {/* Search Bar */}
         <div className="relative flex-1 min-w-[200px]">
           <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
@@ -88,7 +74,6 @@ export default function ProductTable({
           />
         </div>
 
-        {/* Category Filter */}
         <select
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
@@ -97,12 +82,11 @@ export default function ProductTable({
           <option value="">All Categories</option>
           {categories.map((cat) => (
             <option key={cat} value={cat}>
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              {cat}
             </option>
           ))}
         </select>
 
-        {/* Sort */}
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
@@ -114,8 +98,8 @@ export default function ProductTable({
         </select>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
+      {/* Desktop Table */}
+      <div className="overflow-x-auto hidden md:block">
         <table className="w-full border-collapse text-sm md:text-base">
           <thead>
             <tr className="bg-gradient-to-r from-yellow-400/20 to-orange-400/20 text-gray-700">
@@ -129,10 +113,7 @@ export default function ProductTable({
           </thead>
           <tbody className="divide-y divide-gray-200">
             {filteredProducts.map((p) => (
-              <tr
-                key={p._id}
-                className="hover:bg-yellow-50 transition duration-200"
-              >
+              <tr key={p._id} className="hover:bg-yellow-50 transition">
                 <td className="p-4">
                   <img
                     src={getImageSrc(p.image)}
@@ -141,11 +122,7 @@ export default function ProductTable({
                   />
                 </td>
                 <td className="font-semibold text-gray-800">{p.name}</td>
-                <td>
-                  <span className="px-3 py-1 bg-gray-100 rounded-full text-xs font-medium capitalize">
-                    {p.category}
-                  </span>
-                </td>
+                <td>{p.category}</td>
                 <td className="text-yellow-600 font-bold">₹{p.price}</td>
                 <td className="max-w-xs truncate text-gray-600">
                   {p.description}
@@ -153,34 +130,61 @@ export default function ProductTable({
                 <td className="p-4 flex gap-3 justify-center">
                   <button
                     onClick={() => handleEdit(p)}
-                    className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold 
-                               bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"
+                    className="bg-blue-50 text-blue-600 px-3 py-1.5 rounded-lg hover:bg-blue-100 text-xs"
                   >
-                    <FaEdit /> Edit
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDelete(p._id)}
-                    className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold 
-                               bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
+                    className="bg-red-50 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-100 text-xs"
                   >
-                    <FaTrash /> Delete
+                    Delete
                   </button>
                 </td>
               </tr>
             ))}
-
-            {filteredProducts.length === 0 && (
-              <tr>
-                <td
-                  colSpan="6"
-                  className="p-6 text-center text-gray-500 italic"
-                >
-                  No products found 🚫
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-4">
+        {filteredProducts.map((p) => (
+          <div key={p._id} className="bg-white border rounded-lg p-4 shadow-sm">
+            <div className="flex items-center gap-3">
+              <img
+                src={getImageSrc(p.image)}
+                alt={p.name}
+                className="w-16 h-16 rounded-lg object-cover"
+              />
+              <div>
+                <h4 className="font-semibold">{p.name}</h4>
+                <p className="text-sm text-gray-500">{p.category}</p>
+                <p className="text-yellow-600 font-bold">₹{p.price}</p>
+              </div>
+            </div>
+            <p className="text-gray-600 mt-2 text-sm line-clamp-2">
+              {p.description}
+            </p>
+            <div className="flex gap-2 mt-3">
+              <button
+                onClick={() => handleEdit(p)}
+                className="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-xs"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(p._id)}
+                className="bg-red-50 text-red-600 px-3 py-1 rounded-lg text-xs"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+        {filteredProducts.length === 0 && (
+          <p className="text-center text-gray-500">No products found 🚫</p>
+        )}
       </div>
     </div>
   );

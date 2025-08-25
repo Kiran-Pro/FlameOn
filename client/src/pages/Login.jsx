@@ -21,7 +21,7 @@ export default function Login() {
 
   const showAlert = (type, text) => setAlert({ type, text });
 
-  // Email/password
+  // Email login
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     if (!canSubmit) {
@@ -41,7 +41,7 @@ export default function Login() {
     }
   };
 
-  // Google popup
+  // Google login
   const handleGoogle = async () => {
     setLoadingGoogle(true);
     setAlert(null);
@@ -68,19 +68,20 @@ export default function Login() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4">
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black px-4 sm:px-6">
       <div className="w-full max-w-md bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl p-6 sm:p-8">
-        <h1 className="text-3xl font-bold text-center text-white">
+        {/* Heading */}
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-white">
           Welcome <span className="text-yellow-400">back</span>
         </h1>
-        <p className="text-center text-gray-300 mt-2 text-sm">
+        <p className="text-center text-gray-300 mt-2 text-sm sm:text-base">
           Sign in with your email
         </p>
 
         {/* Alert */}
         {alert && (
           <div
-            className={`mt-4 mb-2 text-center text-sm px-3 py-2 rounded-lg ${
+            className={`mt-4 mb-2 text-center text-sm sm:text-base px-3 py-2 rounded-lg ${
               alert.type === "success"
                 ? "bg-green-500/10 text-green-300 border border-green-400/30"
                 : "bg-red-500/10 text-red-300 border border-red-400/30"
@@ -90,7 +91,7 @@ export default function Login() {
           </div>
         )}
 
-        {/* Email/Password */}
+        {/* Email / Password form */}
         <form onSubmit={handleEmailLogin} className="mt-4 space-y-4">
           <Input
             aria-label="Email address"
@@ -123,19 +124,22 @@ export default function Login() {
               {showPass ? <FiEyeOff /> : <FiEye />}
             </button>
           </div>
+
+          {/* Forgot password */}
           <div className="text-right">
             <Link
               to="/forgot-password"
-              className="text-sm text-yellow-400 hover:underline"
+              className="text-xs sm:text-sm text-yellow-400 hover:underline"
             >
               Forgot password?
             </Link>
           </div>
 
+          {/* Login button */}
           <button
             type="submit"
             disabled={loadingEmail || !canSubmit}
-            className={`w-full py-3 rounded-lg font-semibold shadow-lg transition ${
+            className={`w-full py-3 rounded-lg font-semibold shadow-lg transition text-sm sm:text-base ${
               loadingEmail || !canSubmit
                 ? "bg-gray-500 text-gray-200 cursor-not-allowed"
                 : "bg-yellow-400 text-gray-900 hover:bg-yellow-300"
@@ -148,7 +152,7 @@ export default function Login() {
         {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-white/20" />
-          <span className="px-3 text-gray-300 text-sm">OR</span>
+          <span className="px-3 text-gray-300 text-xs sm:text-sm">OR</span>
           <div className="flex-grow border-t border-white/20" />
         </div>
 
@@ -156,7 +160,7 @@ export default function Login() {
         <button
           onClick={handleGoogle}
           disabled={loadingGoogle}
-          className={`w-full flex items-center justify-center gap-3 bg-white text-gray-900 py-3 rounded-lg border border-gray-200 shadow hover:bg-gray-50 transition ${
+          className={`w-full flex items-center justify-center gap-3 bg-white text-gray-900 py-3 sm:py-3.5 rounded-lg border border-gray-200 shadow hover:bg-gray-50 transition text-sm sm:text-base ${
             loadingGoogle ? "opacity-70 cursor-not-allowed" : ""
           }`}
         >
@@ -164,7 +168,8 @@ export default function Login() {
           {loadingGoogle ? "Connecting..." : "Continue with Google"}
         </button>
 
-        <p className="mt-6 text-center text-gray-300 text-sm">
+        {/* Footer link */}
+        <p className="mt-6 text-center text-gray-300 text-sm sm:text-base">
           Don’t have an account?{" "}
           <Link to="/register" className="text-yellow-400 hover:underline">
             Create Account

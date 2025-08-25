@@ -1,14 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import ProductCard from "../components/ProductCard";
+import { useEffect, useMemo, useState } from "react";
 import { FaSearch, FaUtensils } from "react-icons/fa";
-import {
-  FaArrowDownWideShort,
-  FaXmark,
-  FaFilter,
-  FaPlateWheat,
-} from "react-icons/fa6";
+import { FaArrowDownWideShort, FaFilter, FaXmark } from "react-icons/fa6";
 import FlameLoader from "../components/loader/FlameLoader";
+import ProductCard from "../components/ProductCard";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -18,7 +13,7 @@ export default function Products() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // fetch once
+  // fetch products
   useEffect(() => {
     let alive = true;
     setLoading(true);
@@ -29,7 +24,7 @@ export default function Products() {
         const list = Array.isArray(res.data) ? res.data : [];
         setProducts(list);
 
-        // unique categories (case-insensitive), sorted
+        // unique categories
         const uniqueCats = Array.from(
           new Set(
             list
@@ -47,10 +42,9 @@ export default function Products() {
     };
   }, []);
 
-  // derived filtering + sorting (fast + no extra renders)
+  // filtering + sorting
   const filteredProducts = useMemo(() => {
     let updated = [...products];
-
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       updated = updated.filter(
@@ -60,13 +54,11 @@ export default function Products() {
           p.description?.toLowerCase().includes(q)
       );
     }
-
     if (category) {
       updated = updated.filter(
         (p) => (p.category || "").toLowerCase() === category.toLowerCase()
       );
     }
-
     switch (sort) {
       case "low":
         updated.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
@@ -80,15 +72,11 @@ export default function Products() {
       case "za":
         updated.sort((a, b) => (b.name || "").localeCompare(a.name || ""));
         break;
-      default:
-        break;
     }
-
     return updated;
   }, [products, searchQuery, category, sort]);
 
   const activeFilters = Boolean(searchQuery || category || sort);
-
   const clearFilters = () => {
     setSearchQuery("");
     setCategory("");
@@ -99,13 +87,13 @@ export default function Products() {
 
   return (
     <section className="relative min-h-screen py-20 bg-gradient-to-br from-gray-900 via-black to-gray-950 text-white">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Title */}
         <div className="text-center mb-12">
-          <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight drop-shadow">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight drop-shadow">
             <span className="text-yellow-400">Menu</span>
           </h2>
-          <p className="mt-4 text-gray-300 max-w-2xl mx-auto text-lg">
+          <p className="mt-4 text-gray-300 max-w-2xl mx-auto text-base sm:text-lg">
             Explore a curated menu of flavors—from quick bites to gourmet
             feasts.
           </p>
@@ -121,20 +109,18 @@ export default function Products() {
               placeholder="Search your favorite dish..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white/10 border border-white/20 text-white rounded-full pl-14 pr-5 py-3.5 placeholder-gray-400 focus:ring-2 focus:ring-yellow-400 outline-none shadow-xl transition text-base"
-              aria-label="Search products"
+              className="w-full bg-white/10 border border-white/20 text-white rounded-full pl-14 pr-5 py-3.5 placeholder-gray-400 focus:ring-2 focus:ring-yellow-400 outline-none shadow-xl transition text-sm sm:text-base"
             />
           </div>
 
-          {/* Sort & clear */}
-          <div className="flex items-center gap-3">
+          {/* Sort + clear */}
+          <div className="flex flex-wrap gap-3">
             <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/20 backdrop-blur-sm">
               <FaArrowDownWideShort className="w-5 h-5 text-yellow-400" />
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
                 className="bg-transparent outline-none text-white text-sm"
-                aria-label="Sort products"
               >
                 <option className="text-black" value="">
                   Default
@@ -158,10 +144,8 @@ export default function Products() {
               <button
                 onClick={clearFilters}
                 className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 border border-white/20 text-sm hover:bg-white/20 transition"
-                aria-label="Clear filters"
               >
-                <FaXmark className="w-4 h-4" />
-                Clear
+                <FaXmark className="w-4 h-4" /> Clear
               </button>
             )}
           </div>
@@ -169,11 +153,9 @@ export default function Products() {
 
         {/* Categories */}
         <div className="mb-6">
-          <div className="flex items-center gap-2 text-gray-400 mb-3">
+          <div className="flex flex-wrap items-center gap-2 text-gray-400 mb-3">
             <FaFilter className="w-4 h-4 text-yellow-400" />
-            <span className="text-sm">
-              Categories · {categories.length || 0}
-            </span>
+            <span className="text-sm">Categories · {categories.length}</span>
             <span className="ml-auto text-sm text-gray-400">
               Showing{" "}
               <strong className="text-yellow-400">
@@ -186,7 +168,7 @@ export default function Products() {
           <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
             <button
               onClick={() => setCategory("")}
-              className={`px-5 py-2.5 rounded-full font-medium transition whitespace-nowrap ${
+              className={`px-4 sm:px-5 py-2 rounded-full font-medium transition whitespace-nowrap ${
                 category === ""
                   ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-black shadow-lg"
                   : "bg-white/10 hover:bg-white/20 text-gray-300 border border-white/10"
@@ -201,12 +183,11 @@ export default function Products() {
                 <button
                   key={cat}
                   onClick={() => setCategory(cat)}
-                  className={`px-5 py-2.5 rounded-full font-medium transition whitespace-nowrap ${
+                  className={`px-4 sm:px-5 py-2 rounded-full font-medium transition whitespace-nowrap ${
                     active
                       ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-black shadow-lg"
                       : "bg-white/10 hover:bg-white/20 text-gray-300 border border-white/10"
                   }`}
-                  aria-pressed={active}
                 >
                   {label}
                 </button>
@@ -215,7 +196,7 @@ export default function Products() {
           </div>
         </div>
 
-        {/* Products Grid */}
+        {/* Products grid */}
         {filteredProducts.length === 0 ? (
           <div className="mt-16 text-center">
             <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-white/10 flex items-center justify-center text-2xl">
@@ -236,12 +217,12 @@ export default function Products() {
           </div>
         ) : (
           <div
-            className="
-              grid gap-6
+            className="grid gap-6
+              grid-cols-1
               sm:grid-cols-2
+              md:grid-cols-2
               lg:grid-cols-3
-              xl:grid-cols-4
-            "
+              xl:grid-cols-4"
           >
             {filteredProducts.map((p) => (
               <ProductCard key={p._id} product={p} />

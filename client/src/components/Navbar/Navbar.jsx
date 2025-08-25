@@ -21,16 +21,16 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md shadow-lg">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-3">
         {/* Logo */}
         <NavLink to="/" className="flex items-center gap-2">
-          <span className="text-2xl font-extrabold text-gray-900 tracking-wide">
+          <span className="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-wide">
             Flame<span className="text-yellow-500">On</span>
           </span>
         </NavLink>
 
         {/* Navigation Links */}
-        <div className="flex items-center gap-8 text-gray-700">
+        <div className="flex flex-wrap items-center gap-4 sm:gap-6 md:gap-8 text-gray-700 text-sm sm:text-base">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -60,7 +60,8 @@ export default function Navbar() {
                 }`
               }
             >
-              <FaUserShield /> Admin
+              <FaUserShield size={20} />{" "}
+              <span className="hidden sm:inline">Admin</span>
             </NavLink>
           )}
 
@@ -74,7 +75,7 @@ export default function Navbar() {
             }
             aria-label="Cart"
           >
-            <FaCartShopping size={22} />
+            <FaCartShopping size={18} className="sm:size-22" />
             {cart.length > 0 && (
               <span className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-bounce">
                 {cart.length}
@@ -94,11 +95,11 @@ export default function Navbar() {
                 }
                 aria-label="Profile"
               >
-                <FaUser size={22} />
+                <FaUser size={18} className="sm:size-22" />
               </NavLink>
               <button
                 onClick={handleLogout}
-                className="ml-2 bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-full font-semibold shadow transition"
+                className="bg-red-500 hover:bg-red-600 text-white px-3 sm:px-4 py-1 sm:py-1.5 rounded-full font-semibold shadow transition text-sm sm:text-base"
               >
                 Logout
               </button>
@@ -106,7 +107,7 @@ export default function Navbar() {
           ) : (
             <NavLink
               to="/login"
-              className="ml-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-5 py-2 rounded-full font-semibold shadow transition"
+              className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-semibold shadow transition text-sm sm:text-base"
             >
               Login
             </NavLink>

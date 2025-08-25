@@ -5,7 +5,6 @@ export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState("");
 
-  // Load all users
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -18,7 +17,6 @@ export default function AdminUsers() {
     fetchUsers();
   }, []);
 
-  // Promote user to admin
   const makeAdmin = async (id) => {
     try {
       await api.put(`/admin/users/${id}/make-admin`);
@@ -26,14 +24,12 @@ export default function AdminUsers() {
         prev.map((u) => (u._id === id ? { ...u, isAdmin: true } : u))
       );
       setMessage("User promoted to admin");
-    } catch (err) {
-      console.error("Failed to promote user:", err);
+    } catch {
       setMessage("Failed to promote user");
     }
     hideMessage();
   };
 
-  // Remove admin
   const removeAdmin = async (id) => {
     try {
       await api.put(`/admin/users/${id}/remove-admin`);
@@ -41,8 +37,7 @@ export default function AdminUsers() {
         prev.map((u) => (u._id === id ? { ...u, isAdmin: false } : u))
       );
       setMessage("Admin rights removed");
-    } catch (err) {
-      console.error("Failed to remove admin:", err);
+    } catch {
       setMessage("Failed to remove admin");
     }
     hideMessage();
@@ -51,17 +46,17 @@ export default function AdminUsers() {
   const hideMessage = () => setTimeout(() => setMessage(""), 3000);
 
   return (
-    <div className="space-y-6 py-24">
+    <div className="space-y-6 py-16">
       <h2 className="text-2xl font-extrabold text-gray-800">Manage Users</h2>
 
-      {/* Alert */}
       {message && (
         <div className="p-3 rounded-lg bg-yellow-100 text-yellow-800 shadow text-center font-medium">
           {message}
         </div>
       )}
 
-      <div className="overflow-hidden rounded-xl shadow-lg">
+      {/* Desktop Table */}
+      <div className="overflow-hidden rounded-xl shadow-lg hidden md:block">
         <table className="w-full border-collapse">
           <thead className="bg-gray-100 text-gray-700">
             <tr>
@@ -120,6 +115,52 @@ export default function AdminUsers() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile / Tablet Cards */}
+      <div className="md:hidden space-y-4">
+        {users.map((user) => (
+          <div
+            key={user._id}
+            className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
+          >
+            {/* Header */}
+            <div className="flex justify-between items-start mb-2">
+              <div>
+                <p className="font-semibold text-gray-900">{user.name}</p>
+                <p className="text-sm text-gray-500">{user.email}</p>
+              </div>
+              {user.isAdmin ? (
+                <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
+                  Admin
+                </span>
+              ) : (
+                <span className="px-3 py-1 bg-gray-200 text-gray-600 text-xs font-semibold rounded-full">
+                  User
+                </span>
+              )}
+            </div>
+
+            {/* Action Button */}
+            <div className="mt-3">
+              <button
+                onClick={() =>
+                  user.isAdmin ? removeAdmin(user._id) : makeAdmin(user._id)
+                }
+                className={`w-full py-2 rounded-lg text-sm font-medium transition shadow-sm ${
+                  user.isAdmin
+                    ? "bg-red-500 text-white hover:bg-red-600"
+                    : "bg-yellow-500 text-white hover:bg-yellow-600"
+                }`}
+              >
+                {user.isAdmin ? "Remove Admin" : "Make Admin"}
+              </button>
+            </div>
+          </div>
+        ))}
+        {users.length === 0 && (
+          <p className="text-center text-gray-500">No users found</p>
+        )}
       </div>
     </div>
   );
