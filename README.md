@@ -4,7 +4,7 @@ A modern **MERN** app for browsing dishes, adding to cart, applying promos/taxes
 
 ---
 
-## ✨ Features
+## Features
 
 - 🔐 **Auth**: Email/password, Google Sign-In, OTP verification, forgot/reset password  
 - 🍽️ **Menu**: Category chips, search, sort, Swiggy-style responsive cards  
@@ -15,7 +15,7 @@ A modern **MERN** app for browsing dishes, adding to cart, applying promos/taxes
 
 ---
 
-## 🧱 Tech Stack
+## Tech Stack
 
 **Frontend**
 - `react@^19.1.1`, `react-dom@^19.1.1`
@@ -35,7 +35,7 @@ A modern **MERN** app for browsing dishes, adding to cart, applying promos/taxes
 
 ---
 
-##🚀 Quick Start (Development)
+## Quick Start 
 
    Clone the Repository
 
@@ -51,6 +51,42 @@ npm run dev
 cd server
 npm install
 npm start
+```
+
+3) Setup your .env files for both client and server
+
+Client
+(Enter your own values)
+```bash
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+
+VITE_API=
+
+VITE_RAZORPAY_KEY_ID=
+
+```
+Server
+(Enter your own values)
+```bash
+MONGO_URI=
+PORT=
+JWT_SECRET=""
+
+FIREBASE_PROJECT_ID=
+FIREBASE_CLIENT_EMAIL=
+FIREBASE_PRIVATE_KEY=""
+
+EMAIL_USER=
+EMAIL_PASS=
+CLIENT_URL=
+
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
 ```
    
 
