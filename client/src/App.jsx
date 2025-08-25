@@ -18,7 +18,7 @@ import VerifyOtp from "./pages/VerifyOtp";
 import ScrollToTop from "./components/ScrollToTop";
 import AdminDashboard from "./pages/AdminDashboard";
 import Forbidden from "./pages/Forbidden";
-import PublicOnly from "./components/protectedRoute/publicOnly";
+import PublicOnly from "./components/protectedRoute/PublicOnly";
 
 export default function App() {
   return (
