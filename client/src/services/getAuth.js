@@ -1,5 +1,5 @@
 function getAuthState() {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token") || "";
   let user = null;
   try {
     const raw = localStorage.getItem("user");

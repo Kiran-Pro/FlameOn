@@ -4,45 +4,98 @@ export default function Highlights() {
   const items = [
     {
       title: "Fresh Ingredients",
-      desc: "Only the best, locally sourced ingredients.",
-      icon: <FaBowlFood size={36} className="text-green-500" />,
+      desc: "Locally sourced veggies, daily-cut meats & house sauces.",
+      icon: <FaBowlFood className="h-7 w-7" />,
+      accent: "from-green-400 to-emerald-500",
     },
     {
       title: "Fast Delivery",
-      desc: "Hot & fresh, delivered right to your door.",
-      icon: <FaBolt size={36} className="text-yellow-500" />,
+      desc: "Your order lands hot in ~30 minutes on average.",
+      icon: <FaBolt className="h-7 w-7" />,
+      accent: "from-yellow-400 to-orange-500",
     },
     {
-      title: "Affordable Prices",
-      desc: "Delicious meals that don’t break the bank.",
-      icon: <FaWallet size={36} className="text-blue-500" />,
+      title: "Pocket Friendly",
+      desc: "Premium taste without premium pricing.",
+      icon: <FaWallet className="h-7 w-7" />,
+      accent: "from-sky-400 to-indigo-500",
     },
     {
       title: "Loved by Foodies",
-      desc: "Rated 4.9/5 by our amazing customers.",
-      icon: <FaStar size={36} className="text-orange-500" />,
+      desc: "4.9/5 rating across 2k+ happy customers.",
+      icon: <FaStar className="h-7 w-7" />,
+      accent: "from-orange-400 to-pink-500",
     },
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-4xl font-bold text-gray-900 mb-10">
-          Why <span className="text-yellow-500">FlameOn?</span>
-        </h2>
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
-          {items.map((item) => (
+    <section className="relative py-16">
+      {/* Soft background + subtle dot texture (very cheap to render) */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-white to-gray-50" />
+        <div className="absolute inset-0 opacity-[0.35] bg-[radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.06)_1px,transparent_1px)] bg-[length:16px_16px]" />
+      </div>
+
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Heading */}
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
+            Why <span className="text-yellow-500">FlameOn?</span>
+          </h2>
+          <p className="mt-3 text-gray-600">
+            We obsess over freshness, speed, and flavor—so your cravings get the
+            VIP treatment, every single time.
+          </p>
+        </div>
+
+        {/* Cards */}
+        <div
+          role="list"
+          className="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-4"
+        >
+          {items.map(({ title, desc, icon, accent }) => (
             <div
-              key={item.title}
-              className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl hover:-translate-y-2 transition"
+              role="listitem"
+              key={title}
+              className="group relative h-full rounded-2xl"
             >
-              <div className="mb-4 flex justify-center">{item.icon}</div>
-              <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-              <p className="text-gray-600">{item.desc}</p>
+              {/* Hover glow (stays off until hover to avoid repaints) */}
+              <div
+                className={`pointer-events-none absolute -inset-[1px] -z-10 rounded-2xl opacity-0 blur-md transition duration-500 group-hover:opacity-100 bg-gradient-to-br ${accent}`}
+              />
+
+              {/* Card body */}
+              <div className="h-full rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition duration-300 group-hover:-translate-y-1 group-hover:shadow-xl motion-reduce:transform-none">
+                {/* Icon capsule */}
+                <div
+                  className={`mx-auto flex h-12 w-12 items-center justify-center rounded-xl text-white shadow-sm ring-1 ring-black/5 bg-gradient-to-br ${accent}`}
+                  aria-hidden="true"
+                >
+                  {icon}
+                </div>
+
+                {/* Title + micro underline accent */}
+                <h3 className="mt-4 text-lg font-semibold text-gray-900">
+                  {title}
+                </h3>
+                <div
+                  className={`mt-2 h-1 w-10 rounded-full bg-gradient-to-r ${accent} opacity-70 group-hover:opacity-100 transition`}
+                  aria-hidden="true"
+                />
+
+                {/* Copy */}
+                <p className="mt-3 text-gray-600">{desc}</p>
+              </div>
+
+              {/* Light corner sheen (no animation) */}
+              <div className="pointer-events-none absolute -top-1 -right-1 h-20 w-20 rounded-bl-[3rem] bg-gradient-to-br from-white/80 to-transparent opacity-0 transition duration-300 group-hover:opacity-60" />
             </div>
           ))}
         </div>
       </div>
+
+      {/* Gentle divider line at bottom */}
+      <div className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
     </section>
   );
 }

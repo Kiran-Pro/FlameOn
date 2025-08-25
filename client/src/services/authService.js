@@ -15,19 +15,12 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// clear storage on 401 and go to /login (prevents stale user-only state)
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      if (
-        typeof window !== "undefined" &&
-        window.location.pathname !== "/login"
-      ) {
-        window.location.replace("/login");
-      }
     }
     return Promise.reject(err);
   }

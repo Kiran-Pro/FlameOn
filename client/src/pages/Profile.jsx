@@ -23,19 +23,24 @@ export default function Profile() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    let alive = true;
+
     getProfile()
-      .then((data) => setUser(data.user))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
+      .then((data) => alive && setUser(data.user))
+      .catch(() => alive && setUser(null))
+      .finally(() => alive && setLoading(false));
 
     getOrders()
-      .then((data) => setOrders(data))
-      .catch(() => setOrders([]));
+      .then((data) => alive && setOrders(data))
+      .catch(() => alive && setOrders([]));
+
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
   };
 
   if (loading) {
@@ -73,7 +78,7 @@ export default function Profile() {
         {/* Profile Header */}
         <div className="text-center space-y-3">
           <div className="mx-auto h-28 w-28 flex items-center justify-center rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-4xl font-bold text-white shadow-lg">
-            {user.name.charAt(0)}
+            {user?.name?.[0]?.toUpperCase() ?? "U"}
           </div>
           <h2 className="text-3xl font-extrabold">{user.name}</h2>
           <p className="flex items-center justify-center gap-2 text-gray-600">
@@ -128,7 +133,11 @@ export default function Profile() {
                     <FaRupeeSign className="text-yellow-500" /> Total Spent
                   </p>
                   <p className="text-2xl font-extrabold text-yellow-500 mt-2">
-                    ₹{orders.reduce((sum, order) => sum + order.totalPrice, 0)}
+                    ₹
+                    {orders.reduce(
+                      (sum, o) => sum + (Number(o?.totalPrice) || 0),
+                      0
+                    )}
                   </p>
                 </div>
 

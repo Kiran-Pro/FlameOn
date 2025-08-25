@@ -18,11 +18,9 @@ import VerifyOtp from "./pages/VerifyOtp";
 import ScrollToTop from "./components/ScrollToTop";
 import AdminDashboard from "./pages/AdminDashboard";
 import Forbidden from "./pages/Forbidden";
-import getAuthState from "./services/getAuth";
+import PublicOnly from "./components/protectedRoute/publicOnly";
 
 export default function App() {
-  const { isAuthed } = getAuthState();
-
   return (
     <BrowserRouter>
       <ScrollToTop />
@@ -33,14 +31,21 @@ export default function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
 
-        {/* Auth Routes: redirect ONLY if fully authenticated */}
         <Route
           path="/login"
-          element={isAuthed ? <Navigate to="/profile" replace /> : <Login />}
+          element={
+            <PublicOnly>
+              <Login />
+            </PublicOnly>
+          }
         />
         <Route
           path="/register"
-          element={isAuthed ? <Navigate to="/profile" replace /> : <Register />}
+          element={
+            <PublicOnly>
+              <Register />
+            </PublicOnly>
+          }
         />
 
         {/* Forgot/Reset Password & OTP */}

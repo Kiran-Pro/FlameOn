@@ -5,49 +5,64 @@ import getImageSrc from "../utils/getImageSrc";
 export default function ProductCard({ product }) {
   const addToCart = useCartStore((state) => state.addToCart);
 
+  const img = getImageSrc(product.image);
+  const name = product.name || "Untitled Dish";
+  const price = typeof product.price === "number" ? product.price : 0;
+  const category = (product.category || "").trim();
+  const description =
+    product.description ||
+    "Made fresh to order with our house seasonings and sauces.";
+
   return (
-    <div className="group flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-4">
-      {/* Image */}
-      <div className="relative w-28 h-28 flex-shrink-0 rounded-lg overflow-hidden">
-        <img
-          src={getImageSrc(product.image)}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-        {product.category && (
-          <span className="absolute top-2 left-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
-            {product.category}
-          </span>
-        )}
+    <article
+      className="group relative overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10 hover:ring-white/20 shadow-md hover:shadow-xl transition"
+      aria-label={name}
+    >
+      {/* Tag + Price */}
+      {category && (
+        <div className="absolute left-3 top-3 z-10 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 px-3 py-1 text-[11px] font-extrabold text-gray-900 shadow">
+          {category}
+        </div>
+      )}
+      <div className="absolute right-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1 text-sm font-bold text-gray-900 shadow">
+        ₹{price.toLocaleString("en-IN")}
       </div>
 
-      {/* Content */}
-      <div className="flex flex-col justify-between flex-1 min-w-0">
-        {/* Title */}
-        <h3 className="text-lg font-bold text-white truncate">
-          {product.name}
+      {/* Image */}
+      <div className="relative">
+        <img
+          src={img}
+          alt={name}
+          className="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+          loading="lazy"
+        />
+      </div>
+
+      {/* Body */}
+      <div className="p-4">
+        <h3 className="text-lg font-semibold text-white line-clamp-1">
+          {name}
         </h3>
+        <p className="mt-1 text-sm text-gray-300 line-clamp-2">{description}</p>
 
-        {/* Price */}
-        <p className="text-yellow-400 font-extrabold text-lg mt-1">
-          ₹{product.price}
-        </p>
-
-        <div className="flex gap-2 mt-2">
+        {/* Actions */}
+        <div className="mt-4 flex items-center justify-between gap-3">
           <button
             onClick={() => addToCart(product)}
-            className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-semibold px-4 py-1.5 rounded-full text-sm shadow hover:from-orange-500 hover:to-yellow-400 transition"
+            className="flex-1 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 px-4 py-2 text-sm font-bold text-gray-900 shadow hover:shadow-lg hover:scale-[1.02] active:scale-[0.99] transition"
+            aria-label={`Add ${name} to cart`}
           >
-            Add
+            Add to Cart
           </button>
           <Link
             to={`/product/${product._id}`}
-            className="bg-white/10 text-white font-medium px-4 py-1.5 rounded-full text-sm hover:bg-white/20 transition"
+            className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 transition"
+            aria-label={`View details for ${name}`}
           >
             View
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
