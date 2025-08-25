@@ -9,13 +9,11 @@ import {
   FaReceipt,
   FaRupeeSign,
   FaMedal,
-  FaSort,
   FaFilter,
 } from "react-icons/fa";
 import { logout, getProfile, getOrders } from "../services/authService";
 import AccountSettings from "../components/AccountSettings.jsx";
 import { useNavigate } from "react-router-dom";
-import FlameLoader from "../components/loader/FlameLoader.jsx";
 
 export default function Profile() {
   const [activeTab, setActiveTab] = useState("info");
@@ -51,7 +49,7 @@ export default function Profile() {
   if (loading) {
     return (
       <section className="min-h-screen flex items-center justify-center bg-gray-50">
-        <FlameLoader />
+        <div className="w-12 h-12 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
       </section>
     );
   }
