@@ -86,6 +86,7 @@ const Hero = () => {
             { k: "30 min", v: "Avg. Delivery" },
             { k: "4.9 ★", v: "Foodie Rating" },
             { k: "100%", v: "Fresh Daily" },
+            { k: "Top 10", v: "City’s Best" },
           ].map((item) => (
             <div
               key={item.v}
