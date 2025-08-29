@@ -46,7 +46,7 @@ const Hero = () => {
       <div className="relative z-10 max-w-6xl text-center text-white">
         {/* Headline */}
         <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight">
-          Flame{" "}
+          Flame
           <span className="relative inline-block">
             <span className="text-yellow-400 drop-shadow">On</span>
             <span
