@@ -1,39 +1,61 @@
 # FlameOn 🍔 — MERN Food Ordering App
 
-A modern **MERN** app for ordering food which features menu, profile, payment and managing status in a full **Admin Dashboard**. Built with a responsive, mobile-first UI.
+A modern **MERN** food ordering application featuring an interactive menu, secure authentication, smooth checkout with Razorpay, and a complete **Admin Dashboard** for managing products, users, and orders.  
+Designed with a **responsive, mobile-first UI** for the best Swiggy-style experience.
 
 ---
 
-## Features
+## ✨ Features
 
-- 🔐 **Auth**: Email/password - JWT, Google Sign-In - FireBase, OTP verification - FireBase, forgot/reset password  
-- 🍽️ **Menu**: Category chips, search, sort, Swiggy-style responsive cards  
-- 🛒 **Cart/Checkout**: Quantity controls, promo code, GST calculation  
-- 👤 **Profile**: Info, order history, loyalty tier, account settings  
-- 🛠️ **Admin**: CRUD - Products, categories, users (promote/demote), orders
-- 📱 **Responsive UI**: Mobile, tablet, desktop (Tailwind + React Icons)
+- 🔐 **Authentication**
+  - Email/Password with JWT  
+  - Google Sign-In via Firebase  
+  - OTP Verification, Forgot & Reset Password  
+
+- 🍽️ **Menu**
+  - Category filters, search & sorting  
+  - Swiggy-style responsive product cards  
+
+- 🛒 **Cart & Checkout**
+  - Quantity controls  
+  - Promo code with discounts  
+  - GST calculation  
+  - Razorpay payment integration  
+
+- 👤 **Profile**
+  - User info & account settings  
+  - Order history with loyalty tier system  
+
+- 🛠️ **Admin Dashboard**
+  - CRUD operations for Products & Categories  
+  - Manage Users (promote/demote)  
+  - Manage Orders with live status updates  
+
+- 📱 **Responsive UI**
+  - Optimized for mobile, tablet, and desktop  
+  - Built with Tailwind CSS & React Icons  
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 **Frontend**
-- `react@^19.1.1`, `react-dom@^19.1.1`
-- `react-router-dom@^7.8.0`
-- `axios@^1.11.0`
-- `zustand@^5.0.7`
-- `react-icons@^5.5.0`
-- `firebase@^12.1.0`
+- [`react@^19.1.1`](https://react.dev) + [`react-dom@^19.1.1`](https://react.dev)  
+- [`react-router-dom@^7.8.0`](https://reactrouter.com)  
+- [`axios@^1.11.0`](https://axios-http.com)  
+- [`zustand@^5.0.7`](https://github.com/pmndrs/zustand)  
+- [`react-icons@^5.5.0`](https://react-icons.github.io/react-icons)  
+- [`firebase@^12.1.0`](https://firebase.google.com)  
 
 **Backend**
-- `express@^5.1.0`, `cors@^2.8.5`, `dotenv@^17.2.1`(backend)
-- `mongodb@^6.18.0`, `mongoose@^8.17.1`(database)
-- `jsonwebtoken@^9.0.2`, `bcryptjs@^3.0.2`(token and encryption)
-- `multer@^2.0.2` (uploads), `nodemailer@^7.0.5` (emails)
-- `firebase-admin@^13.4.0` (OTP/Google)
-- `razorpay@^2.9.6` (payments)
-
----
+- [`express@^5.1.0`](https://expressjs.com) + [`cors@^2.8.5`](https://www.npmjs.com/package/cors)  
+- [`dotenv@^17.2.1`](https://www.npmjs.com/package/dotenv)  
+- [`mongodb@^6.18.0`](https://www.mongodb.com) + [`mongoose@^8.17.1`](https://mongoosejs.com)  
+- [`jsonwebtoken@^9.0.2`](https://www.npmjs.com/package/jsonwebtoken) + [`bcryptjs@^3.0.2`](https://www.npmjs.com/package/bcryptjs)  
+- [`multer@^2.0.2`](https://www.npmjs.com/package/multer) (uploads)  
+- [`nodemailer@^7.0.5`](https://nodemailer.com) (emails)  
+- [`firebase-admin@^13.4.0`](https://firebase.google.com/docs/admin/setup)  
+- [`razorpay@^2.9.6`](https://razorpay.com/docs) (payments)  
 
 ## Quick Start 
 
@@ -111,6 +133,17 @@ npm i -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 ```
 
+## Testing Credentials - User and Admin
+
+User
+Register with real email to recieve updates (Recommended)
+
+Admin
+```text
+Email - krc2win@gmail.com
+Pass - Qwerty@1234
+```
+
 ### Testing Credentials - RazorPay
 
 1) Card
@@ -132,8 +165,9 @@ failure@razorpay
 
 ## Live Links
 
-client - 
-server - 
+[Client↗](https://flame-on.vercel.app/)
+[Server↗](https://flameon.onrender.com/)
+
 
 
 
