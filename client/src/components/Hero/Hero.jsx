@@ -81,7 +81,7 @@ const Hero = () => {
         </div>
 
         {/* Trust badges */}
-        <div className="mx-auto mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 max-w-md sm:max-w-3xl">
+        <div className="mx-auto mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-md sm:max-w-3xl">
           {[
             { k: "30 min", v: "Avg. Delivery" },
             { k: "4.9 ★", v: "Foodie Rating" },
