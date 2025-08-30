@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   otpCode: String,
   otpExpires: Date,
-  isAdmin: { type: Boolean, default: false }, // 👈 Add this
+  isAdmin: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("User", userSchema);
